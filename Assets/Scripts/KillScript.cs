@@ -13,8 +13,9 @@ public class KillScript : MonoBehaviour {
 	
 	}
 
-	void OnTriggerEnter2D(){
-
+	void OnTriggerEnter2D(Collider2D other){
+		if( other.CompareTag("Player") )
+		   Kill(other.transform);
 	}
 
 	void OnTriggerStay2D(){
@@ -22,5 +23,6 @@ public class KillScript : MonoBehaviour {
 	}
 
 	void Kill(Transform toKill){
+		Application.LoadLevel(Application.loadedLevelName);
 	}
 }

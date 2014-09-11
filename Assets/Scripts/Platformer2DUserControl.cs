@@ -1,15 +1,15 @@
-﻿using UnityEngine;
+using UnityEngine;
 
-[RequireComponent(typeof(PlatformerCharacter2D))]
+[RequireComponent(typeof(Character2D))]
 public class Platformer2DUserControl : MonoBehaviour 
 {
-	private PlatformerCharacter2D character;
+	private Character2D character;
     private bool jump;
 
 
 	void Awake()
 	{
-		character = GetComponent<PlatformerCharacter2D>();
+		character = GetComponent<Character2D>();
 	}
 
     void Update ()

@@ -53,7 +53,7 @@ public class Build : MonoBehaviour {
 	}
 
 	void DeleteBox(Transform boxToRemove) {
-		if(canRemove && boxToRemove.CompareTag("BuildBox") && boxToRemove){
+		if(canRemove && boxToRemove.CompareTag("BuildBox") && boxToRemove != null){
 			Destroy(boxToRemove.gameObject);
 			budget++;
 		}
