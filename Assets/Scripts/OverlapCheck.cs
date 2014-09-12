@@ -5,30 +5,28 @@ public class OverlapCheck : MonoBehaviour {
 
 	public bool overlaping = false;
 	PlaceHolder placeHolder;
+	[SerializeField] LayerMask whatIsGround;
 
 	void Start () {
+
 		placeHolder = transform.parent.GetComponent<PlaceHolder>();
 	}
 
-	void OnTriggerEnter2D( Collider2D other ) {
-		HandleOverlap(other.transform);
-	}
-	
-	void OnTriggerStay2D( Collider2D other ) {
-		HandleOverlap(other.transform);
-	}
+	void FixedUpdate() {
+		Collider2D overlap = Physics2D.OverlapCircle(transform.position, 0.3f , whatIsGround);
 
-	void OnTriggerExit2D( Collider2D other ) { 
-		if(other.transform != transform.parent)
-			overlaping = false;
+		overlaping = overlap != null;
 
-		if( other.transform.CompareTag("BuildBox") ) {
+		if(overlaping && overlap.transform.CompareTag("BuildBox")) {
+			placeHolder.currentBox = overlap.transform;
+		} else {
 			placeHolder.currentBox = null;
-			Debug.Log(placeHolder.currentBox);
+
 		}
 	}
-		
+			
 	void HandleOverlap(Transform tr) {
+
 		if( tr != transform.parent )
 			overlaping = true;
 
@@ -36,4 +34,8 @@ public class OverlapCheck : MonoBehaviour {
 			placeHolder.currentBox = tr;
 	}
 
+	void OnBoxRemoved(){
+		overlaping = false;
+		placeHolder.currentBox = null;
+	}
 }
