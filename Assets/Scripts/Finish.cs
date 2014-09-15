@@ -1,21 +1,40 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Finish : MonoBehaviour {
 
 	bool finished = false;
 	Transform player;
+	bool open = false;
 
-	void Start () {
+	public Trigger[] triggers;
+
+	public Transform lockSprite;
 	
-	}
-	
-	// Update is called once per frame
 	void Update () {
 		if(finished){
 			player.position = Vector2.Lerp(player.position, transform.position, 0.05f);
 			Invoke("ChangeMap", 2);
 		}
+
+		bool shouldOpen = true;
+
+		if(triggers.Length > 0){
+
+			foreach (Trigger t in triggers) {
+				if(!t.active){
+					shouldOpen = false;
+				}
+			}
+			open = shouldOpen;
+
+		} else {
+			open = true;
+		}
+
+		lockSprite.gameObject.SetActive(!open);
+		collider2D.enabled = open;
 	}
 
 	void OnTriggerEnter2D( Collider2D other ){

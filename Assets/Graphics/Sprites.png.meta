@@ -15,6 +15,10 @@ TextureImporter:
     21300020: Sprites_9
     21300022: Sprites_10
     21300024: Sprites_11
+    21300026: Sprites_12
+    21300028: Sprites_12
+    21300030: Sprites_13
+    21300032: Sprites_14
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -59,20 +63,10 @@ TextureImporter:
     - name: Sprites_0
       rect:
         serializedVersion: 2
-        x: 50
-        y: 845
+        x: 172
+        y: 847
         width: 105
         height: 105
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Sprites_1
-      rect:
-        serializedVersion: 2
-        x: 185
-        y: 870
-        width: 45
-        height: 65
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -173,6 +167,46 @@ TextureImporter:
         y: 854
         width: 66
         height: 66
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sprites_12
+      rect:
+        serializedVersion: 2
+        x: 806
+        y: 824
+        width: 126
+        height: 126
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sprites_12
+      rect:
+        serializedVersion: 2
+        x: 726
+        y: 703
+        width: 91
+        height: 105
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sprites_13
+      rect:
+        serializedVersion: 2
+        x: 826
+        y: 703
+        width: 91
+        height: 105
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sprites_14
+      rect:
+        serializedVersion: 2
+        x: 736
+        y: 574
+        width: 72
+        height: 56
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}

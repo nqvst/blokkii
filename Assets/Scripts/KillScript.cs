@@ -14,8 +14,13 @@ public class KillScript : MonoBehaviour {
 	}
 
 	void OnTriggerEnter2D(Collider2D other){
-		if( other.CompareTag("Player") )
+		if( other.CompareTag("Player") ) {
 		   Kill(other.transform);
+		}
+
+		if( other.CompareTag("BuildBox") ) {
+			other.transform.SendMessage("Respawn", SendMessageOptions.DontRequireReceiver);
+		}
 	}
 
 	void OnTriggerStay2D(){
@@ -25,4 +30,5 @@ public class KillScript : MonoBehaviour {
 	void Kill(Transform toKill){
 		Application.LoadLevel(Application.loadedLevelName);
 	}
+	
 }
