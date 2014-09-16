@@ -32,8 +32,9 @@ public class Build : MonoBehaviour {
 
 		if(Input.GetMouseButtonUp(1)) {
 			canRemove = placeholderScript.canRemove;
-
-			DeleteBox(placeholderScript.currentBox);
+			if( placeholderScript.currentBox ){
+				DeleteBox(placeholderScript.currentBox);
+			}
 		}
 
 		if(Input.GetMouseButtonUp(0)) {
@@ -47,13 +48,14 @@ public class Build : MonoBehaviour {
 
 	void BuildBox() {
 		if(canBuild && budget > 0) {
-			Instantiate( boxPrefab, _placeHolder.position, Quaternion.identity);
+			Vector2 buildPosition = new Vector2 (Mathf.RoundToInt(_placeHolder.position.x) , Mathf.RoundToInt(_placeHolder.position.y) );
+			Instantiate( boxPrefab, buildPosition, Quaternion.identity);
 			budget--;
 		}
 	}
 
 	void DeleteBox(Transform boxToRemove) {
-		if(canRemove && boxToRemove.CompareTag("BuildBox") && boxToRemove != null){
+		if(canRemove && boxToRemove.CompareTag("BuildBox")){
 			Destroy(boxToRemove.gameObject);
 			budget++;
 		}

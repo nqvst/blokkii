@@ -15,6 +15,6 @@ public class BoxCounter : MonoBehaviour {
 	
 
 	void LateUpdate () {
-		text.text = times + " " + buildScript.budget.ToString();
+		text.text = buildScript.budget.ToString();
 	}
 }

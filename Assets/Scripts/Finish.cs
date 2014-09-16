@@ -15,6 +15,7 @@ public class Finish : MonoBehaviour {
 	void Update () {
 		if(finished){
 			player.position = Vector2.Lerp(player.position, transform.position, 0.05f);
+
 			Invoke("ChangeMap", 2);
 		}
 

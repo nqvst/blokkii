@@ -14,16 +14,15 @@ public class Camera2DFollow : MonoBehaviour {
 	Vector3 currentVelocity;
 	Vector3 lookAheadPos;
 	
-	// Use this for initialization
 	void Start () {
+		if( !target ) { enabled = false; return;}
 		lastTargetPosition = target.position;
 		offsetZ = (transform.position - target.position).z;
 		transform.parent = null;
 	}
 	
-	// Update is called once per frame
 	void FixedUpdate () {
-		
+
 		// only update lookahead pos if accelerating or changed direction
 		float xMoveDelta = (target.position - lastTargetPosition).x;
 
