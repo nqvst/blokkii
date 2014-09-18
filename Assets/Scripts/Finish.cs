@@ -7,10 +7,13 @@ public class Finish : MonoBehaviour {
 	bool finished = false;
 	Transform player;
 	bool open = false;
-
-	public Trigger[] triggers;
-
+	
 	public Transform lockSprite;
+	SwitchBus bus;
+
+	void Start () {
+		bus = GetComponent<SwitchBus>();
+	}
 	
 	void Update () {
 		if(finished){
@@ -19,20 +22,7 @@ public class Finish : MonoBehaviour {
 			Invoke("ChangeMap", 2);
 		}
 
-		bool shouldOpen = true;
-
-		if(triggers.Length > 0){
-
-			foreach (Trigger t in triggers) {
-				if(!t.active){
-					shouldOpen = false;
-				}
-			}
-			open = shouldOpen;
-
-		} else {
-			open = true;
-		}
+		open = bus.active;
 
 		lockSprite.gameObject.SetActive(!open);
 		collider2D.enabled = open;

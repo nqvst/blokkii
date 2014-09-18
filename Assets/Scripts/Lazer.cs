@@ -4,31 +4,37 @@ using System.Collections;
 public class Lazer : MonoBehaviour {
 
 
-	LineRenderer lr;
+	LineRenderer lineRenderer;
 	public Transform sparks;
 
 	[SerializeField] bool isOn = false;
+	SwitchBus bus;
 
 	void Start () {
-		lr = GetComponent<LineRenderer>();
+		lineRenderer = GetComponent<LineRenderer>();
+		bus = GetComponent<SwitchBus>();
+
 	}
 
 	void Update () {
-		if( isOn ) {
 
+		isOn = bus.active;
+
+		if( isOn ) {
+			Activate ();
 
 			RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.up);	
 
-			lr.SetPosition(0, transform.position);
-			lr.SetPosition(1, hit.point);
+			lineRenderer.SetPosition(0, transform.position);
+			lineRenderer.SetPosition(1, hit.point);
 			float ran1 = Random.Range(0.05f, 0.1f);
 			float ran2 = Random.Range(0.05f, 0.1f);
-			lr.SetWidth(ran1, ran2);
+			lineRenderer.SetWidth(ran1, ran2);
 
 			Color startColor = new Color(Random.Range(0.3f,1), Random.Range(0,0.3f), 0);
 			Color endColor = new Color(Random.Range(0.3f,1), Random.Range(0,0.3f), 0);
 
-			lr.SetColors(startColor, endColor);
+			lineRenderer.SetColors(startColor, endColor);
 
 			if( hit ) {
 				if(hit.collider.transform.CompareTag("Player") ) {
@@ -49,7 +55,12 @@ public class Lazer : MonoBehaviour {
 
 	void Deactivate() {
 		sparks.gameObject.SetActive(false);
-		lr.enabled = false;
+		lineRenderer.enabled = false;
+	}
+
+	void Activate () {
+		sparks.gameObject.SetActive(true);
+		lineRenderer.enabled = true;
 	}
 
 	void Restart() {

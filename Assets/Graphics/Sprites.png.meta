@@ -183,20 +183,20 @@ TextureImporter:
     - name: Sprites_12
       rect:
         serializedVersion: 2
-        x: 726
-        y: 703
-        width: 91
-        height: 105
+        x: 756
+        y: 719
+        width: 61
+        height: 73
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: Sprites_13
       rect:
         serializedVersion: 2
-        x: 826
-        y: 703
-        width: 91
-        height: 105
+        x: 852
+        y: 719
+        width: 64
+        height: 73
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
