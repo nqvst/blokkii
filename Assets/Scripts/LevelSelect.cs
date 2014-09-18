@@ -1,39 +1,76 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class LevelSelect : MonoBehaviour 
 {
 
-	[SerializeField] float fadeOutTime;
+	[SerializeField] float fadeTime;
 	[SerializeField] AudioSource audioSource;
+	[SerializeField] Image fadeImg;
 
 	public string currentLevel;
 
 	private string levelToLoad = "";
-	private bool fadeOut = false;
+	private bool fade = false;
 	private float volume = 1;
+	private float alpha = 0;
+	private float targetVolume = 1;
+
+	Color targetColor = Color.black;
 
 	void Start ()
 	{
-		fadeOut = false;
+		fadeTime = fadeTime <= 0 ? 1 : fadeTime;  
+
+		if( fadeImg ) 
+		{
+			fadeImg.color  = new Color(0,0,0,1);
+		}
+
+		targetColor = new Color(0,0,0,0);
+
+		if( audioSource ) 
+		{
+			audioSource.volume = 0;
+		}
+
+		targetVolume = 1;
+
+		fade = true;
+
 		currentLevel = Application.loadedLevelName;
 	}
 
 	void Update () 
 	{
-		if( fadeOut && audioSource ) 
+		if( fade && audioSource) 
 		{
-			volume = Mathf.Lerp( volume, 0, Time.deltaTime * fadeOutTime );
+			volume = Mathf.Lerp( volume, targetVolume, Time.deltaTime * fadeTime );
 			audioSource.volume = volume;
 		}
+
+		if( fade && fadeImg) 
+		{
+			fadeImg.color = Color.Lerp(fadeImg.color, targetColor, Time.deltaTime * fadeTime);
+
+			if(fadeImg.color.a == targetColor.a){
+				fade = false;
+				targetColor = Color.black;
+			}
+		}
+
 	}
 	
 	public void SetLevel( string levelName ) 
 	{
 		levelToLoad = levelName;
-		fadeOut = true;
+		targetColor = Color.black;
+		targetVolume = 0;
+		fade = true;
 
-		Invoke( "LoadLevel", fadeOutTime );
+		Invoke( "LoadLevel", fadeTime );
+
 
 	}
 
@@ -44,6 +81,8 @@ public class LevelSelect : MonoBehaviour
 
 	void OnLevelWasLoaded( int level )
 	{
+
+		fade = true;
 		currentLevel = Application.loadedLevelName;
 	}
 }
