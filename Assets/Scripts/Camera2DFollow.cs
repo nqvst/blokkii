@@ -15,6 +15,13 @@ public class Camera2DFollow : MonoBehaviour {
 	Vector3 lookAheadPos;
 	
 	void Start () {
+		GameObject player = GameObject.Find("Player");
+
+		if( player ) 
+		{
+			target = player.transform;
+		}
+
 		if( !target ) { enabled = false; return;}
 		lastTargetPosition = target.position;
 		offsetZ = (transform.position - target.position).z;

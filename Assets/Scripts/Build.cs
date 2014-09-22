@@ -15,6 +15,7 @@ public class Build : MonoBehaviour {
 	public bool canBuild = false;
 	public bool canRemove = false;
 	PlaceHolder placeholderScript;
+	bool boxWillFall = false;
 
 	public int budget = 0;
 
@@ -55,6 +56,7 @@ public class Build : MonoBehaviour {
 		{
 			canBuild = placeholderScript.canBuild;
 			canRemove = placeholderScript.canRemove;
+			boxWillFall = !placeholderScript.overlaping;
 			if( canBuild )
 			{
 				BuildBox();
@@ -71,7 +73,11 @@ public class Build : MonoBehaviour {
 	{
 		if(canBuild && budget > 0) {
 			Vector2 buildPosition = new Vector2 (Mathf.RoundToInt(_placeHolder.position.x) , Mathf.RoundToInt(_placeHolder.position.y) );
-			Instantiate( boxPrefab, buildPosition, Quaternion.identity);
+			Transform box = Instantiate( boxPrefab, buildPosition, Quaternion.identity) as Transform;
+			if(boxWillFall){
+				box.rigidbody2D.isKinematic = false;
+			}
+
 			budget--;
 		}
 	}

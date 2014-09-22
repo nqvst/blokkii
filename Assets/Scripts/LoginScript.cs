@@ -13,10 +13,10 @@ public class LoginScript : MonoBehaviour {
 	public ParseUser user = null;
 
 	bool showSpinner = false;
-
+	string message;
 
 	void Start () {
-
+		user = ParseUser.CurrentUser;
 	}
 	
 	// Update is called once per frame
@@ -27,8 +27,9 @@ public class LoginScript : MonoBehaviour {
 		}
 		if(user != null){
 			Debug.Log("Horayyyy! " + user.Username);
-			Application.LoadLevel("Intro1");
+			Application.LoadLevel("main");
 		}
+		Debug.Log(message);
 	
 	}
 
@@ -41,7 +42,7 @@ public class LoginScript : MonoBehaviour {
 
 			if (t.IsFaulted || t.IsCanceled) {
 				showSpinner = false;
-				
+				message = t.Exception.Message;
 			} else {
 				showSpinner = false;
 				user = t.Result;

@@ -12,7 +12,7 @@ public class Trigger : MonoBehaviour {
 	void FixedUpdate () {
 		active = Physics2D.OverlapCircle(transform.position, 0.2f);
 
-		renderer.color = active ? Color.green : Color.red;
+		renderer.color = active ? Color.green : Color.white;
 
 	}
 }

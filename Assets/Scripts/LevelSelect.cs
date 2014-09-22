@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using Parse;
 
+[RequireComponent (typeof (ReadSceneNames))]
 public class LevelSelect : MonoBehaviour 
 {
 
@@ -17,10 +19,15 @@ public class LevelSelect : MonoBehaviour
 	private float alpha = 0;
 	private float targetVolume = 1;
 
+	private string [] levels;
+
 	Color targetColor = Color.black;
 
 	void Start ()
 	{
+	
+		levels = GetComponent<ReadSceneNames>().scenes;
+	
 		fadeTime = fadeTime <= 0 ? 1 : fadeTime;  
 
 		if( fadeImg ) 
@@ -71,11 +78,23 @@ public class LevelSelect : MonoBehaviour
 
 		Invoke( "LoadLevel", fadeTime );
 
+	}
 
+	public void SetLevel( int levelIndex ) 
+	{
+		levelToLoad = levels[levelIndex];
+		targetColor = Color.black;
+		targetVolume = 0;
+		fade = true;
+
+		
+		Invoke( "LoadLevel", fadeTime );
+		
 	}
 
 	private void LoadLevel() 
 	{
+
 		Application.LoadLevel( levelToLoad );
 	}
 

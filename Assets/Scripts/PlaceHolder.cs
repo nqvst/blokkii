@@ -14,19 +14,26 @@ public class PlaceHolder : MonoBehaviour {
 	SpriteRenderer spriteRenderer;
 
 	OverlapCheck innerCheck;
+	private Build buildScript;
+	void Start () 
+	{
+		GameObject player = GameObject.Find("Player");
+		buildScript = player.GetComponent<Build>();
 
-	void Start () {
 		spriteRenderer = GetComponent<SpriteRenderer>();
 		innerCheck = transform.FindChild("InnerOverlapCheck").GetComponent<OverlapCheck>();
 	}
 
-	void FixedUpdate() {
+	void FixedUpdate() 
+	{
 		overlaping = Physics2D.OverlapCircle(transform.position, 0.6f , whatIsGround);
 	}
 	
-	void Update () {
+	void Update () 
+	{
 
-		canBuild = !innerCheck.overlaping && overlaping;
+		canBuild = !innerCheck.overlaping && buildScript.budget > 0;
+
 		Color targetColor = Color.red;
 		targetColor = canBuild ? Color.green : Color.red;
 
@@ -36,7 +43,7 @@ public class PlaceHolder : MonoBehaviour {
 		Color removeIndicatorColor;
 
 		if(canRemove && currentBox) {
-			removeIndicatorColor = new Color(1,1,1,0.7f);
+			removeIndicatorColor = new Color(1,1,1,1f);
 		} else {
 			removeIndicatorColor = new Color(1,1,1,0);
 		}
@@ -44,18 +51,5 @@ public class PlaceHolder : MonoBehaviour {
 		removeIndicator.color = Color.Lerp(removeIndicator.color, removeIndicatorColor, 0.1f);
 
 	}
-
-//	void OnTriggerEnter2D( Collider2D other ){
-//		if (!transform.CompareTag("Player"))
-//			overlapping = true;
-//	}
-//
-//	void OnTriggerStay2D( Collider2D other ){
-//		if (!transform.CompareTag("Player"))
-//			overlapping = true;
-//	}
-//	void OnTriggerExit2D( Collider2D other ) {
-//		if (!transform.CompareTag("Player"))
-//			overlapping = false;
-//	}
+	
 }

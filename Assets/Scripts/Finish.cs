@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Parse;
 
 public class Finish : MonoBehaviour {
 
@@ -9,14 +10,19 @@ public class Finish : MonoBehaviour {
 	bool open = false;
 	
 	public Transform lockSprite;
+	public LevelSelect levelSelect;
+
 	SwitchBus bus;
 
 	void Start () {
+		levelSelect = GameObject.Find("HUD").GetComponent<LevelSelect>();
 		bus = GetComponent<SwitchBus>();
 	}
 	
-	void Update () {
-		if(finished){
+	void Update () 
+	{
+		if(finished)
+		{
 			player.position = Vector2.Lerp(player.position, transform.position, 0.05f);
 
 			Invoke("ChangeMap", 2);
@@ -29,7 +35,7 @@ public class Finish : MonoBehaviour {
 	}
 
 	void OnTriggerEnter2D( Collider2D other ){
-		if (!transform.CompareTag("Player")){
+		if (other.transform.CompareTag("Player")){
 
 			finished = true;
 			player = other.transform;
@@ -42,11 +48,13 @@ public class Finish : MonoBehaviour {
 	}
 	
 	void OnTriggerStay2D( Collider2D other ){
-		if (!transform.CompareTag("Player"))
+		if (other.transform.CompareTag("Player"))
 			finished = true;
 	}
 
 	void ChangeMap() {
-		Application.LoadLevel(Application.loadedLevel + 1);
+		levelSelect.SetLevel(Application.loadedLevel + 1);
+
+//		Application.LoadLevel(Application.loadedLevel + 1);
 	}
 }

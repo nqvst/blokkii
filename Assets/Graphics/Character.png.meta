@@ -6,6 +6,10 @@ TextureImporter:
     21300002: Character_0
     21300004: Character_1
     21300006: Character_2
+    21300008: Character_3
+    21300010: Character_4
+    21300012: Character_5
+    21300014: Character_6
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -50,10 +54,10 @@ TextureImporter:
     - name: Character_0
       rect:
         serializedVersion: 2
-        x: 124
-        y: 94
-        width: 41
-        height: 28
+        x: 125
+        y: 100
+        width: 39
+        height: 22
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -74,6 +78,46 @@ TextureImporter:
         y: 61
         width: 105
         height: 106
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Character_3
+      rect:
+        serializedVersion: 2
+        x: 127
+        y: 64
+        width: 23
+        height: 23
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Character_4
+      rect:
+        serializedVersion: 2
+        x: 151
+        y: 68
+        width: 15
+        height: 15
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Character_5
+      rect:
+        serializedVersion: 2
+        x: 139
+        y: 51
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Character_6
+      rect:
+        serializedVersion: 2
+        x: 159
+        y: 51
+        width: 5
+        height: 5
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}

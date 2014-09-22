@@ -123,10 +123,10 @@ TextureImporter:
     - name: Sprites_7
       rect:
         serializedVersion: 2
-        x: 571
-        y: 715
-        width: 102
-        height: 102
+        x: 570
+        y: 720
+        width: 108
+        height: 89
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}

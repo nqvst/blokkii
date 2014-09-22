@@ -24,17 +24,23 @@ public class Lazer : MonoBehaviour {
 			Activate ();
 
 			RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.up);	
+			Vector2 endpoint = transform.up * 1000;
+
+			if ( hit ) {
+				endpoint = hit.point;
+			}
 
 			lineRenderer.SetPosition(0, transform.position);
-			lineRenderer.SetPosition(1, hit.point);
+			lineRenderer.SetPosition(1, endpoint);
+
 			float ran1 = Random.Range(0.05f, 0.1f);
 			float ran2 = Random.Range(0.05f, 0.1f);
 			lineRenderer.SetWidth(ran1, ran2);
 
-			Color startColor = new Color(Random.Range(0.3f,1), Random.Range(0,0.3f), 0);
-			Color endColor = new Color(Random.Range(0.3f,1), Random.Range(0,0.3f), 0);
-
-			lineRenderer.SetColors(startColor, endColor);
+//			Color startColor = new Color(Random.Range(0.3f,1), Random.Range(0,0.3f), 0);
+//			Color endColor = new Color(Random.Range(0.3f,1), Random.Range(0,0.3f), 0);
+//
+//			lineRenderer.SetColors(startColor, endColor);
 
 			if( hit ) {
 				if(hit.collider.transform.CompareTag("Player") ) {
