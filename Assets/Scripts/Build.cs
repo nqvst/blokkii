@@ -14,8 +14,9 @@ public class Build : MonoBehaviour {
 	private Vector2 mousePosition;
 	public bool canBuild = false;
 	public bool canRemove = false;
+	public bool canStick = false;
+
 	PlaceHolder placeholderScript;
-	bool boxWillFall = false;
 
 	public int budget = 0;
 
@@ -43,23 +44,32 @@ public class Build : MonoBehaviour {
 
 		_placeHolder.position = Vector2.Lerp( _placeHolder.position, placeholderTargetPosition, 0.2f );
 
-		// should be removed soon enough, since leftclick does the job.
-		if( Input.GetMouseButtonUp(1) ) 
-		{ 
-			canRemove = placeholderScript.canRemove;
-			if( placeholderScript.currentBox ){
-				DeleteBox(placeholderScript.currentBox);
-			}
-		}
+//		if( Input.GetMouseButtonUp(0) && Input.GetKey(KeyCode.LeftShift)) 
+//		{
+//			canBuild = placeholderScript.canBuild;
+//			
+//			if( canBuild )
+//			{
+//				BuildBox(true);
+//			}
+//
+//		}
+
 
 		if( Input.GetMouseButtonUp(0) ) 
 		{
+			canStick = placeholderScript.overlaping;
 			canBuild = placeholderScript.canBuild;
 			canRemove = placeholderScript.canRemove;
-			boxWillFall = !placeholderScript.overlaping;
+
 			if( canBuild )
 			{
-				BuildBox();
+				if(Input.GetKey(KeyCode.LeftShift)) {
+					BuildBox(true);
+				}
+				else if (canStick) {
+					BuildBox(false);
+				}
 			}
 			else if( canRemove && placeholderScript.currentBox )
 			{
@@ -69,12 +79,13 @@ public class Build : MonoBehaviour {
 	}
 
 
-	void BuildBox() 
+	void BuildBox( bool willFall ) 
 	{
 		if(canBuild && budget > 0) {
 			Vector2 buildPosition = new Vector2 (Mathf.RoundToInt(_placeHolder.position.x) , Mathf.RoundToInt(_placeHolder.position.y) );
 			Transform box = Instantiate( boxPrefab, buildPosition, Quaternion.identity) as Transform;
-			if(boxWillFall){
+
+			if(willFall){
 				box.rigidbody2D.isKinematic = false;
 			}
 

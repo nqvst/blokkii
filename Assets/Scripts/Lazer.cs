@@ -8,6 +8,10 @@ public class Lazer : MonoBehaviour {
 	public Transform sparks;
 
 	[SerializeField] bool isOn = false;
+	[SerializeField] float max_thickness;
+	[SerializeField] float min_thickness;
+	[SerializeField] LayerMask whatToHit;
+
 	SwitchBus bus;
 
 	void Start () {
@@ -33,8 +37,8 @@ public class Lazer : MonoBehaviour {
 			lineRenderer.SetPosition(0, transform.position);
 			lineRenderer.SetPosition(1, endpoint);
 
-			float ran1 = Random.Range(0.05f, 0.1f);
-			float ran2 = Random.Range(0.05f, 0.1f);
+			float ran1 = Random.Range(min_thickness, max_thickness);
+			float ran2 = Random.Range(min_thickness, max_thickness);
 			lineRenderer.SetWidth(ran1, ran2);
 
 //			Color startColor = new Color(Random.Range(0.3f,1), Random.Range(0,0.3f), 0);

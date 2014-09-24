@@ -19,6 +19,8 @@ TextureImporter:
     21300028: Sprites_12
     21300030: Sprites_13
     21300032: Sprites_14
+    21300034: Sprites_15
+    21300036: Sprites_11
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -41,7 +43,7 @@ TextureImporter:
   textureFormat: -3
   maxTextureSize: 1024
   textureSettings:
-    filterMode: 0
+    filterMode: 1
     aniso: 1
     mipBias: -1
     wrapMode: 1
@@ -73,10 +75,10 @@ TextureImporter:
     - name: Sprites_2
       rect:
         serializedVersion: 2
-        x: 330
-        y: 850
-        width: 100
-        height: 100
+        x: 332
+        y: 852
+        width: 96
+        height: 97
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -100,26 +102,6 @@ TextureImporter:
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Sprites_5
-      rect:
-        serializedVersion: 2
-        x: 330
-        y: 716
-        width: 100
-        height: 100
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Sprites_6
-      rect:
-        serializedVersion: 2
-        x: 444
-        y: 716
-        width: 100
-        height: 100
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
     - name: Sprites_7
       rect:
         serializedVersion: 2
@@ -127,36 +109,6 @@ TextureImporter:
         y: 720
         width: 108
         height: 89
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Sprites_8
-      rect:
-        serializedVersion: 2
-        x: 330
-        y: 598
-        width: 100
-        height: 100
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Sprites_9
-      rect:
-        serializedVersion: 2
-        x: 444
-        y: 598
-        width: 101
-        height: 100
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Sprites_10
-      rect:
-        serializedVersion: 2
-        x: 330
-        y: 488
-        width: 100
-        height: 100
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -207,6 +159,26 @@ TextureImporter:
         y: 574
         width: 72
         height: 56
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sprites_15
+      rect:
+        serializedVersion: 2
+        x: 688
+        y: 798
+        width: 94
+        height: 46
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sprites_11
+      rect:
+        serializedVersion: 2
+        x: 583
+        y: 620
+        width: 74
+        height: 83
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
