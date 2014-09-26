@@ -4,6 +4,7 @@ using UnityEngine;
 public class Platformer2DUserControl : MonoBehaviour 
 {
 	private Character2D character;
+	private MoveCharacter character2;
     private bool jump;
 
 
