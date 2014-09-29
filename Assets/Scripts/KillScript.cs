@@ -3,12 +3,11 @@ using System.Collections;
 
 public class KillScript : MonoBehaviour {
 
-	// Use this for initialization
+	Build player;
 	void Start () {
-	
+		player = GameObject.Find("Player").GetComponent<Build>();
 	}
 	
-	// Update is called once per frame
 	void Update () {
 	
 	}
@@ -19,6 +18,7 @@ public class KillScript : MonoBehaviour {
 		}
 
 		if( other.CompareTag("BuildBox") ) {
+			player.budget ++;
 			other.transform.SendMessage("Respawn", SendMessageOptions.DontRequireReceiver);
 		}
 	}

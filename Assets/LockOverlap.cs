@@ -6,10 +6,17 @@ public class LockOverlap : MonoBehaviour {
 	[SerializeField] LayerMask whatToOverlap;
 	[SerializeField] Transform overlapTr;
 	[SerializeField] float radius = 0.1f;
+	[SerializeField] OverlapCheck innerOverlap;
 
-	private bool overlaping = false;
+	public bool overlaping = false;
+
+	void Start () {
+
+	}
 	
 	void FixedUpdate () {
+
+
 
 		overlaping = false;
 		
@@ -22,6 +29,9 @@ public class LockOverlap : MonoBehaviour {
 				if(c) 
 				{
 					overlaping = true;
+					if( innerOverlap ) {
+						overlaping = !innerOverlap.overlaping;		
+					}
 				}
 			}
 		}

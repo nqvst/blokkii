@@ -14,6 +14,7 @@ public class PlaceHolder : MonoBehaviour {
 	SpriteRenderer spriteRenderer;
 
 	OverlapCheck innerCheck;
+	
 	private Build buildScript;
 	void Start () 
 	{
@@ -34,11 +35,6 @@ public class PlaceHolder : MonoBehaviour {
 
 		canBuild = !innerCheck.overlaping && buildScript.budget > 0;
 
-
-//		Color targetColor = Color.red;
-//		targetColor = canBuild ? Color.green : Color.red;
-//
-//		spriteRenderer.color = Color.Lerp(spriteRenderer.color, targetColor, 0.1f);
 		canRemove = innerCheck.overlaping;
 
 		Color removeIndicatorColor;
