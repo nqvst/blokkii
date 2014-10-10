@@ -38,18 +38,15 @@ public class Box : MonoBehaviour {
 				if(c && c != collider2D ) 
 				{
 					overlaping = true;
-//					if(!set){
-//						SetKinematic();
-//					}
 				}
 			}
 		}
 
-		if(!rigidbody2D.isKinematic && (up.overlaping || left.overlaping || right.overlaping || overlaping) ){
+		if(!rigidbody2D.isKinematic && overlaping ){
 			SetKinematic();
 		}
 
-		rigidbody2D.isKinematic = up.overlaping || left.overlaping || right.overlaping || overlaping ;
+//		rigidbody2D.isKinematic = up.overlaping || left.overlaping || right.overlaping || overlaping ;
 	}
 
 	void Update()
@@ -63,7 +60,7 @@ public class Box : MonoBehaviour {
 	void SetKinematic()
 	{
 		rigidbody2D.isKinematic = true;
-		targetPos = new Vector2(Mathf.Floor (transform.position.x + rigidbody2D.velocity.magnitude) , Mathf.Floor( transform.position.y ));
+		targetPos = new Vector2(Mathf.RoundToInt (transform.position.x + rigidbody2D.velocity.magnitude) , Mathf.RoundToInt( transform.position.y ));
 		set = true;
 	}
 

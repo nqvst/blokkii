@@ -21,6 +21,7 @@ TextureImporter:
     21300032: Sprites_14
     21300034: Sprites_15
     21300036: Sprites_11
+    21300038: Sprites_12
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -75,10 +76,10 @@ TextureImporter:
     - name: Sprites_2
       rect:
         serializedVersion: 2
-        x: 332
-        y: 852
-        width: 96
-        height: 97
+        x: 321
+        y: 841
+        width: 117
+        height: 119
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -179,6 +180,16 @@ TextureImporter:
         y: 620
         width: 74
         height: 83
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Sprites_12
+      rect:
+        serializedVersion: 2
+        x: 856
+        y: 635
+        width: 36
+        height: 36
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}

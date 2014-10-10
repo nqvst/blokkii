@@ -13,6 +13,6 @@ public class EyeSize : MonoBehaviour {
 
 	void Update () {
 		float dist = Vector2.Distance( transform.position , body.position);
-		transform.localScale = new Vector3( 1 , 1 - dist * 0.3f, 1 - dist * .3f);
+		transform.localScale = new Vector3( 1 , 1.2f - dist, 1.2f - dist );
 	}
 }

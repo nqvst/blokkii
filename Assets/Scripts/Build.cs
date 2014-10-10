@@ -34,55 +34,57 @@ public class Build : MonoBehaviour {
 	void Update () 
 	{
 
-//		mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+		mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+		if( Vector3.Distance(_transform.position, mousePosition) < Vector2.Distance(transform.position, placeHolderGuide.position) ) 
+		{
+			placeholderTargetPosition = new Vector2 ( Mathf.RoundToInt( mousePosition.x ) , Mathf.RoundToInt( mousePosition.y ) ); 
+//			placeholderTargetPosition = mousePosition;
+		}
+		else 
+		{
+			placeholderTargetPosition = new Vector2 (Mathf.RoundToInt( placeHolderGuide.position.x ) , Mathf.RoundToInt( placeHolderGuide.position.y ) ); 
+			//placeholderTargetPosition = placeHolderGuide.position;
+		}
+
+
 //
-//		if( Vector3.Distance(_transform.position, mousePosition) < Vector2.Distance(transform.position, placeHolderGuide.position) ) 
-//		{
-//			placeholderTargetPosition = new Vector2 ( Mathf.RoundToInt( mousePosition.x ) , Mathf.RoundToInt( mousePosition.y ) ); 
+//
+//
+//	
+//		// just toggle now that i think about it just set the offset and use in transform pint.
+//		if(Input.GetKeyDown(KeyCode.J)){
+//			placeholderOffset = -Vector2.right * 1;
+//			if (lastOffset == placeholderOffset){
+//				placeholderOffset *= 2;
+//			}
+//			lastOffset = placeholderOffset;
+//
+//
 //		}
-//		else 
-//		{
-//			placeholderTargetPosition = new Vector2 (Mathf.RoundToInt( placeHolderGuide.position.x ) , Mathf.RoundToInt( placeHolderGuide.position.y ) ); 
+//		if(Input.GetKeyDown(KeyCode.L)){
+//			placeholderOffset = Vector2.right * 1;
+//			if (lastOffset == placeholderOffset){
+//				placeholderOffset *= 2;
+//			}
+//			lastOffset = placeholderOffset;
 //		}
-
-
-
-
-
-	
-		// just toggle now that i think about it just set the offset and use in transform pint.
-		if(Input.GetKeyDown(KeyCode.J)){
-			placeholderOffset = -Vector2.right * 1;
-			if (lastOffset == placeholderOffset){
-				placeholderOffset *= 2;
-			}
-			lastOffset = placeholderOffset;
-
-
-		}
-		if(Input.GetKeyDown(KeyCode.L)){
-			placeholderOffset = Vector2.right * 1;
-			if (lastOffset == placeholderOffset){
-				placeholderOffset *= 2;
-			}
-			lastOffset = placeholderOffset;
-		}
-		if(Input.GetKeyDown(KeyCode.I)){
-			placeholderOffset = Vector2.up * 1;
-			if (lastOffset == placeholderOffset){
-				placeholderOffset *= 2;
-			}
-			lastOffset = placeholderOffset;
-		}
-		if(Input.GetKeyDown(KeyCode.K)){
-			placeholderOffset = -Vector2.up * 1;
-			if (lastOffset == placeholderOffset){
-				placeholderOffset *= 2;
-			}
-			lastOffset = placeholderOffset;
-		}
-
-		placeholderTargetPosition = transform.TransformPoint(placeholderOffset);
+//		if(Input.GetKeyDown(KeyCode.I)){
+//			placeholderOffset = Vector2.up * 1;
+//			if (lastOffset == placeholderOffset){
+//				placeholderOffset *= 2;
+//			}
+//			lastOffset = placeholderOffset;
+//		}
+//		if(Input.GetKeyDown(KeyCode.K)){
+//			placeholderOffset = -Vector2.up * 1;
+//			if (lastOffset == placeholderOffset){
+//				placeholderOffset *= 2;
+//			}
+//			lastOffset = placeholderOffset;
+//		}
+//
+//		placeholderTargetPosition = transform.TransformPoint(placeholderOffset);
 
 		_placeHolder.position = Vector2.Lerp( _placeHolder.position, placeholderTargetPosition, 0.2f );
 

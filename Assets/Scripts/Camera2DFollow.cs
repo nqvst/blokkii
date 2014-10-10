@@ -14,19 +14,21 @@ public class Camera2DFollow : MonoBehaviour {
 	Vector3 currentVelocity;
 	Vector3 lookAheadPos;
 	
-	void Start () {
-		GameObject player = GameObject.Find("Player");
+	bool playerIsSet = false;
 
-		if( player ) 
-		{
-			target = player.transform;
-		}
+	void Start () {
+
+		Screen.showCursor = false;
+
+		setFinishAsTarget();
+		StartCoroutine(ShowFinishTimer(2.0F));
 
 		if( !target ) { enabled = false; return;}
 		lastTargetPosition = target.position;
 		offsetZ = (transform.position - target.position).z;
 		transform.parent = null;
 	}
+
 	
 	void FixedUpdate () {
 
@@ -47,5 +49,28 @@ public class Camera2DFollow : MonoBehaviour {
 		transform.position = newPos;
 		
 		lastTargetPosition = target.position;		
+	}
+
+	void setFinishAsTarget() {
+		GameObject finish = GameObject.Find("Finish");
+		
+		if( finish ) 
+		{
+			target = finish.transform;
+		}
+	}
+
+	void SetPlayerAsTarget() {
+		GameObject player = GameObject.Find("Player");
+		
+		if( player ) 
+		{
+			target = player.transform;
+		}
+	}
+
+	IEnumerator ShowFinishTimer(float waitTime) {
+		yield return new WaitForSeconds(waitTime);
+		SetPlayerAsTarget();
 	}
 }

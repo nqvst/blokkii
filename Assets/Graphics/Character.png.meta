@@ -45,7 +45,7 @@ TextureImporter:
   alignment: 0
   spritePivot: {x: .5, y: .5}
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 200
   alphaIsTransparency: 1
   textureType: 8
   buildTargetSettings: []
@@ -54,72 +54,22 @@ TextureImporter:
     - name: Character_0
       rect:
         serializedVersion: 2
-        x: 125
-        y: 100
-        width: 39
-        height: 22
+        x: 16
+        y: 340
+        width: 44
+        height: 44
       alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: Character_1
       rect:
         serializedVersion: 2
-        x: 16
-        y: 64
-        width: 100
-        height: 100
+        x: 39
+        y: 313
+        width: 13
+        height: 13
       alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Character_2
-      rect:
-        serializedVersion: 2
-        x: 186
-        y: 61
-        width: 105
-        height: 106
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Character_3
-      rect:
-        serializedVersion: 2
-        x: 127
-        y: 64
-        width: 23
-        height: 23
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Character_4
-      rect:
-        serializedVersion: 2
-        x: 151
-        y: 68
-        width: 15
-        height: 15
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Character_5
-      rect:
-        serializedVersion: 2
-        x: 139
-        y: 51
-        width: 7
-        height: 7
-      alignment: 0
-      pivot: {x: .5, y: .5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-    - name: Character_6
-      rect:
-        serializedVersion: 2
-        x: 159
-        y: 51
-        width: 5
-        height: 5
-      alignment: 0
-      pivot: {x: .5, y: .5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
   spritePackingTag: 
   userData: 

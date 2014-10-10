@@ -25,7 +25,7 @@ public class LevelSelect : MonoBehaviour
 
 	void Start ()
 	{
-//		Screen.showCursor = false;
+		Screen.showCursor = true;
 		levels = GetComponent<ReadSceneNames>().scenes;
 	
 		fadeTime = fadeTime <= 0 ? 1 : fadeTime;  

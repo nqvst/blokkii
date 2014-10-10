@@ -21,6 +21,9 @@ public class SwitchBus : MonoBehaviour {
 			if(triggers.Length > 0){
 				
 				foreach (Trigger t in triggers) {
+					if(!t){
+						Debug.Log(transform.name);
+					}
 					if(t.active){
 						shouldActivate = false;
 					}
