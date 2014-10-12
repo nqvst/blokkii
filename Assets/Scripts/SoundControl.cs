@@ -1,49 +1,60 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class SoundControl : MonoBehaviour
 {
 
-	AudioSource audioSource;
+	AudioSource musicManager;
 	bool mute = false;
 	float fadeOutTime = 2f;
+	Toggle musicToggle;
 
 	void Start ()
 	{
-		audioSource = GameObject.Find ("Music").GetComponent<AudioSource> ();	
+		mute = PlayerPrefs.GetString("Music") == "off";
+
+		musicManager = GameObject.Find ("Music").GetComponent<AudioSource> ();	
+
+		musicToggle = transform.FindChild("Mute").GetComponent<Toggle>();
+		musicToggle.isOn = mute;
+		
+		if ( !mute ){
+			musicManager.Play();
+		}
+
 	}
 
 	void Update ()
 	{
 		float targetVolume = mute ? 0f : 1f;
-		if (audioSource.volume != targetVolume) {
-			audioSource.volume = Mathf.Lerp (audioSource.volume, targetVolume, Time.deltaTime * fadeOutTime);
+		if (musicManager.volume != targetVolume) {
+			musicManager.volume = Mathf.Lerp (musicManager.volume, targetVolume, Time.deltaTime * fadeOutTime);
 		}
-
-		if(Mathf.Abs(targetVolume - audioSource.volume) < 0.1 && targetVolume == 0) {
-			StopMusic();
-		}
-		Debug.Log(targetVolume);
 
 
 	}
 
 	void StopMusic ()
 	{
-		audioSource.Pause ();
+		musicManager.Pause ();
+		PlayerPrefs.SetString("Music", "off");
 	}
 
 	void ResumeMusic ()
 	{
-		audioSource.Play ();
+		musicManager.Play ();
+		PlayerPrefs.SetString("Music", "on");
 	}
 
 	public void ToggleMute ()
 	{
-		mute = !mute;
+		mute = musicToggle.isOn;
 		Debug.Log(mute);
 		if(!mute){
 			ResumeMusic();
+		}else{
+			Invoke("StopMusic", 1);
 		}
 
 	}

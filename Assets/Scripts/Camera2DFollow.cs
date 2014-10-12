@@ -3,18 +3,16 @@ using System.Collections;
 
 public class Camera2DFollow : MonoBehaviour {
 	
-	public Transform target;
-	public float damping = 1;
-	public float lookAheadFactor = 3;
-	public float lookAheadReturnSpeed = 0.5f;
-	public float lookAheadMoveThreshold = 0.1f;
+	Transform target;
+	float damping = 0.4f;
+	float lookAheadFactor = 0f;
+	float lookAheadReturnSpeed = 0f;
+	float lookAheadMoveThreshold = 0f;
 	
 	float offsetZ;
 	Vector3 lastTargetPosition;
 	Vector3 currentVelocity;
 	Vector3 lookAheadPos;
-	
-	bool playerIsSet = false;
 
 	void Start () {
 

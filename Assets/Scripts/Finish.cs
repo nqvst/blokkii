@@ -54,7 +54,5 @@ public class Finish : MonoBehaviour {
 
 	void ChangeMap() {
 		levelSelect.SetLevel(Application.loadedLevel + 1);
-
-//		Application.LoadLevel(Application.loadedLevel + 1);
 	}
 }
