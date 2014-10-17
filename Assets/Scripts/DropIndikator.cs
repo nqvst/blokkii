@@ -18,7 +18,7 @@ public class DropIndikator : MonoBehaviour {
 
 
 
-		show = Input.GetKey(KeyCode.LeftShift);
+		show = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.S);
 
 		spr.color = Color.Lerp (spr.color, (show ? showColor: hideColor), .2f);
 	}

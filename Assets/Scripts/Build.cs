@@ -39,52 +39,11 @@ public class Build : MonoBehaviour {
 		if( Vector3.Distance(_transform.position, mousePosition) < Vector2.Distance(transform.position, placeHolderGuide.position) ) 
 		{
 			placeholderTargetPosition = new Vector2 ( Mathf.RoundToInt( mousePosition.x ) , Mathf.RoundToInt( mousePosition.y ) ); 
-//			placeholderTargetPosition = mousePosition;
 		}
 		else 
 		{
 			placeholderTargetPosition = new Vector2 (Mathf.RoundToInt( placeHolderGuide.position.x ) , Mathf.RoundToInt( placeHolderGuide.position.y ) ); 
-			//placeholderTargetPosition = placeHolderGuide.position;
 		}
-
-
-//
-//
-//
-//	
-//		// just toggle now that i think about it just set the offset and use in transform pint.
-//		if(Input.GetKeyDown(KeyCode.J)){
-//			placeholderOffset = -Vector2.right * 1;
-//			if (lastOffset == placeholderOffset){
-//				placeholderOffset *= 2;
-//			}
-//			lastOffset = placeholderOffset;
-//
-//
-//		}
-//		if(Input.GetKeyDown(KeyCode.L)){
-//			placeholderOffset = Vector2.right * 1;
-//			if (lastOffset == placeholderOffset){
-//				placeholderOffset *= 2;
-//			}
-//			lastOffset = placeholderOffset;
-//		}
-//		if(Input.GetKeyDown(KeyCode.I)){
-//			placeholderOffset = Vector2.up * 1;
-//			if (lastOffset == placeholderOffset){
-//				placeholderOffset *= 2;
-//			}
-//			lastOffset = placeholderOffset;
-//		}
-//		if(Input.GetKeyDown(KeyCode.K)){
-//			placeholderOffset = -Vector2.up * 1;
-//			if (lastOffset == placeholderOffset){
-//				placeholderOffset *= 2;
-//			}
-//			lastOffset = placeholderOffset;
-//		}
-//
-//		placeholderTargetPosition = transform.TransformPoint(placeholderOffset);
 
 		_placeHolder.position = Vector2.Lerp( _placeHolder.position, placeholderTargetPosition, 0.2f );
 
@@ -97,7 +56,7 @@ public class Build : MonoBehaviour {
 
 			if( canBuild )
 			{
-				if(Input.GetKey(KeyCode.LeftShift)) {
+				if(Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.S)) {
 					BuildBox(true);
 				}
 				else if (canStick) {

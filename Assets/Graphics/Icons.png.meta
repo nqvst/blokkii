@@ -5,6 +5,7 @@ TextureImporter:
     21300000: Icons
     21300002: Speaker
     21300004: Disable
+    21300006: Icons_2
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -62,6 +63,16 @@ TextureImporter:
         x: 84
         y: 132
         width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: Icons_2
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 56
+        width: 67
         height: 64
       alignment: 0
       pivot: {x: .5, y: .5}

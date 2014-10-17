@@ -10,6 +10,7 @@ public class LevelSelect : MonoBehaviour
 	[SerializeField] float fadeTime;
 	[SerializeField] AudioSource audioSource;
 	[SerializeField] Image fadeImg;
+	[SerializeField] Text levelText;
 
 	public string currentLevel;
 
@@ -25,6 +26,7 @@ public class LevelSelect : MonoBehaviour
 
 	void Start ()
 	{
+
 		Screen.showCursor = true;
 		levels = GetComponent<ReadSceneNames>().scenes;
 	
@@ -47,6 +49,9 @@ public class LevelSelect : MonoBehaviour
 		fade = true;
 
 		currentLevel = Application.loadedLevelName;
+		if (levelText) {
+			levelText.text = currentLevel;
+		}
 	}
 
 	void Update () 
@@ -92,6 +97,11 @@ public class LevelSelect : MonoBehaviour
 		
 	}
 
+	public void RestartLevel()
+	{
+		SetLevel(Application.loadedLevelName);
+	}
+
 	private void LoadLevel() 
 	{
 
@@ -103,5 +113,8 @@ public class LevelSelect : MonoBehaviour
 
 		fade = true;
 		currentLevel = Application.loadedLevelName;
+		if (levelText) {
+			levelText.text = currentLevel;
+		}
 	}
 }
