@@ -8,13 +8,11 @@ public class ParseLevel : MonoBehaviour {
 	[SerializeField] Transform groundPrefab;
 	[SerializeField] Transform boxPrefab;
 	[SerializeField] Transform playerPrefab;
-	[SerializeField] Transform hudPrefab;
-	[SerializeField] Transform musicPrefab;
 	[SerializeField] Transform finishPrefab;
 
-
+	GameManager gameManager;
 	Transform nextPrefab;
-
+	string levelId = "";
 	ParseObject level;
 
 	bool built = false;
@@ -72,12 +70,23 @@ public class ParseLevel : MonoBehaviour {
 		}
 
 	}
-
 	void Start () {
+		gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+		levelId = gameManager.levelId;
+		if(levelId != ""){
+			LoadLevel(gameManager.levelId);
+		}
+	}
+
+	public void LoadLevel (string objectId) {
 		ParseQuery<ParseObject> query = ParseObject.GetQuery("Level");
-		query.GetAsync("SGaxVIYSuD").ContinueWith(t => {
+		Debug.Log("before GetAsync");
+		query.GetAsync(objectId).ContinueWith(t => {
+			Debug.Log("inside GetAsync");
 			level = t.Result;
+			built = false;
 		});
+		Debug.Log("after GetAsync");
 
 	}
 	

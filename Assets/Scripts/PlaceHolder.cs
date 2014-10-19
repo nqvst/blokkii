@@ -40,9 +40,9 @@ public class PlaceHolder : MonoBehaviour {
 		Color removeIndicatorColor;
 
 		if(canRemove && currentBox) {
-			removeIndicatorColor = new Color(1,1,1,1f);
+			removeIndicatorColor = new Color(1,0,0,1f);
 		} else {
-			removeIndicatorColor = new Color(1,1,1,0);
+			removeIndicatorColor = new Color(1,0,0,0);
 		}
 
 		removeIndicator.color = Color.Lerp(removeIndicator.color, removeIndicatorColor, 0.1f);

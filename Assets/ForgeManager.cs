@@ -1,21 +1,26 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 using Parse;
 
 public class ForgeManager : MonoBehaviour 
 {
 
 	[SerializeField] Transform [] prefabs;
+	[SerializeField] InputField levelNameInput;
 	Transform nextPrefab;
 	Transform currentPrefab;
 	Transform selectedPrefab;
+
 
 	[SerializeField] LayerMask whatToHit;
 	bool canBuild = true;
 
 	ParseObject level = new ParseObject("Level");
 	IList<object> levelObjects = new List<object>();
+
+	public bool playMode = false;
 
 	public virtual Vector3 mousePosition 
 	{
@@ -31,6 +36,7 @@ public class ForgeManager : MonoBehaviour
 		nextPrefab = prefabs[0];
 		SpawnPrefab();
 		level["name"] = "[untitled]";
+		levelNameInput.value = (string)level["name"];
 	}
 
 	void SpawnPrefab ()
@@ -60,6 +66,8 @@ public class ForgeManager : MonoBehaviour
 	
 	void Update () 
 	{
+		if(playMode) return;
+
 		if(Input.GetMouseButtonDown(0)) {
 
 			RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero, whatToHit);
@@ -77,7 +85,7 @@ public class ForgeManager : MonoBehaviour
 			
 		}
 
-		if( currentPrefab ) {
+		if( currentPrefab && canBuild ) {
 			Vector3 targetPosition = new Vector2 (Mathf.RoundToInt(mousePosition.x) , Mathf.RoundToInt(mousePosition.y) ); 
 			currentPrefab.position = Vector2.Lerp(currentPrefab.position, targetPosition, 0.3f);
 		}
@@ -135,6 +143,7 @@ public class ForgeManager : MonoBehaviour
 	{
 		Debug.Log ("SaveLevel");
 		Debug.Log(levelObjects.Count);
+		level["name"] = levelNameInput.value;
 		level["objects"] = levelObjects;
 
 		level.SaveAsync();
