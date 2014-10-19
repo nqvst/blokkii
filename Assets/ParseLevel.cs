@@ -31,6 +31,7 @@ public class ParseLevel : MonoBehaviour {
 	{
 		IList< object > levelObjects = lev.Get<List<object>>("objects");
 		Debug.Log(levelObjects.Count.ToString() + " objects in the list" );
+
 		for( int i = 0;  i < levelObjects.Count; i++){
 			IDictionary dict = (IDictionary) levelObjects[i];
 
@@ -74,7 +75,7 @@ public class ParseLevel : MonoBehaviour {
 
 	void Start () {
 		ParseQuery<ParseObject> query = ParseObject.GetQuery("Level");
-		query.GetAsync("YEZQhvga6g").ContinueWith(t => {
+		query.GetAsync("XKMV6ZhVvf").ContinueWith(t => {
 			level = t.Result;
 		});
 

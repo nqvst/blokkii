@@ -3,13 +3,15 @@ using System.Collections;
 
 public class KillScript : MonoBehaviour {
 
-	Build player;
+	Build buildScript;
 	void Start () {
-		player = GameObject.Find("Player").GetComponent<Build>();
+		SetBuildScript();
 	}
 	
 	void Update () {
-	
+		if(!buildScript){
+			SetBuildScript();
+		}
 	}
 
 	void OnTriggerEnter2D(Collider2D other){
@@ -18,17 +20,21 @@ public class KillScript : MonoBehaviour {
 		}
 
 		if( other.CompareTag("BuildBox") ) {
-			player.budget ++;
+			buildScript.budget ++;
 			other.transform.SendMessage("Respawn", SendMessageOptions.DontRequireReceiver);
 		}
 	}
 
-	void OnTriggerStay2D(){
-		
-	}
 
 	void Kill(Transform toKill){
 		Application.LoadLevel(Application.loadedLevelName);
+	}
+
+	void SetBuildScript(){
+		GameObject player = GameObject.Find("Player");
+		if( player ) {
+			buildScript = player.GetComponent<Build>();
+		}
 	}
 	
 }

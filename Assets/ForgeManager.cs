@@ -9,7 +9,9 @@ public class ForgeManager : MonoBehaviour
 	[SerializeField] Transform [] prefabs;
 	Transform nextPrefab;
 	Transform currentPrefab;
+	Transform selectedPrefab;
 
+	[SerializeField] LayerMask whatToHit;
 	bool canBuild = true;
 
 	ParseObject level = new ParseObject("Level");
@@ -54,13 +56,26 @@ public class ForgeManager : MonoBehaviour
 	{
 		currentPrefab.transform.Rotate(0, 0, -90);
 	}
+
 	
 	void Update () 
 	{
-		
-		if(Input.GetMouseButtonDown(0) && currentPrefab && canBuild) {
-			PlacePrefab();
+		if(Input.GetMouseButtonDown(0)) {
+
+			RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
+			
+			if(hit.collider != null && currentPrefab == null)
+			{
+				selectedPrefab = hit.transform;
+				RemoveObjectFromLevel(hit.transform);
+			} 
+			
+			if ( currentPrefab && canBuild){
+				PlacePrefab();
+			}
+			
 		}
+
 		if( currentPrefab ) {
 			Vector3 targetPosition = new Vector2 (Mathf.RoundToInt(mousePosition.x) , Mathf.RoundToInt(mousePosition.y) ); 
 			currentPrefab.position = Vector2.Lerp(currentPrefab.position, targetPosition, 0.3f);
@@ -68,10 +83,10 @@ public class ForgeManager : MonoBehaviour
 		if(Input.GetKeyDown(KeyCode.Escape)){
 			Cancel();
 		}
-		if (Input.GetKeyDown(KeyCode.Q)) {
+		if (Input.GetKeyDown(KeyCode.Q) && canBuild) {
 			RotateLeft();	
 		}
-		if (Input.GetKeyDown(KeyCode.E)) {
+		if (Input.GetKeyDown(KeyCode.E) && canBuild) {
 			RotateRight();	
 		}
 	}
@@ -87,15 +102,25 @@ public class ForgeManager : MonoBehaviour
 		};
 		levelObjects.Add(pObject);
 	}
-	void RemoveObjectFromLevel(Transform obj)
+	void RemoveObjectFromLevel(Transform objectToRemove)
 	{
-		
+		int indexToRemove = -1;
+		for(int i = 0; i < levelObjects.Count; i++) {
+			IDictionary item = (IDictionary) levelObjects[i];
+			if( item ["name"].Equals(objectToRemove.name)){
+				indexToRemove = i;
+
+			}
+		}
+		levelObjects.RemoveAt(indexToRemove);
+		Destroy(objectToRemove.gameObject);
+		selectedPrefab = null;
 	}
 
 	void Cancel()
 	{
 		if(currentPrefab){
-				Destroy(currentPrefab.gameObject);
+			Destroy(currentPrefab.gameObject);
 		}
 	}
 
@@ -109,7 +134,9 @@ public class ForgeManager : MonoBehaviour
 	public void SaveLevel()
 	{
 		Debug.Log ("SaveLevel");
+		Debug.Log(levelObjects.Count);
 		level["objects"] = levelObjects;
+
 		level.SaveAsync();
 	}
 
@@ -139,4 +166,7 @@ public class ForgeManager : MonoBehaviour
 		};
 	}
 
+	public void test(){
+		Debug.Log("it cklickedd");
+	}
 }
