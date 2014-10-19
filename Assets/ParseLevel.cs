@@ -75,7 +75,7 @@ public class ParseLevel : MonoBehaviour {
 
 	void Start () {
 		ParseQuery<ParseObject> query = ParseObject.GetQuery("Level");
-		query.GetAsync("XKMV6ZhVvf").ContinueWith(t => {
+		query.GetAsync("SGaxVIYSuD").ContinueWith(t => {
 			level = t.Result;
 		});
 

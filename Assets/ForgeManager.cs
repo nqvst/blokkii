@@ -62,10 +62,11 @@ public class ForgeManager : MonoBehaviour
 	{
 		if(Input.GetMouseButtonDown(0)) {
 
-			RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
+			RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero, whatToHit);
 			
-			if(hit.collider != null && currentPrefab == null)
+			if(hit.transform != null && currentPrefab == null)
 			{
+				Debug.Log(hit.transform.name);
 				selectedPrefab = hit.transform;
 				RemoveObjectFromLevel(hit.transform);
 			} 
@@ -109,7 +110,6 @@ public class ForgeManager : MonoBehaviour
 			IDictionary item = (IDictionary) levelObjects[i];
 			if( item ["name"].Equals(objectToRemove.name)){
 				indexToRemove = i;
-
 			}
 		}
 		levelObjects.RemoveAt(indexToRemove);
