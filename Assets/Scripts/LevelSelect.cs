@@ -104,8 +104,11 @@ public class LevelSelect : MonoBehaviour
 
 	private void LoadLevel() 
 	{
-
 		Application.LoadLevel( levelToLoad );
+	}
+
+	public void LoadMainMenu(){
+		Application.LoadLevel("main");
 	}
 
 	void OnLevelWasLoaded( int level )

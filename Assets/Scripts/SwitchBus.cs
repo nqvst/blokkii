@@ -23,8 +23,8 @@ public class SwitchBus : MonoBehaviour {
 				foreach (Trigger t in triggers) {
 					if(!t){
 						Debug.Log(transform.name);
-					}
-					if(t.active){
+						active = true;
+					}else if(t.active){
 						shouldActivate = false;
 					}
 				}

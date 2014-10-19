@@ -15,6 +15,10 @@ public class BoxCounter : MonoBehaviour {
 	
 
 	void LateUpdate () {
+		if(!buildScript ){
+			buildScript = GameObject.Find("Player").GetComponent<Build>();
+		}
+
 		text.text = buildScript.budget.ToString();
 	}
 }

@@ -20,7 +20,8 @@ public class LoginScript : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void Update () 
+	{
 		if(logIn) {
 			logIn = false;
 			Login();
@@ -29,16 +30,18 @@ public class LoginScript : MonoBehaviour {
 			Debug.Log("Horayyyy! " + user.Username);
 			Application.LoadLevel("main");
 		}
-		Debug.Log(message);
+		if ( message != null) {
+			Debug.Log( message );
+		}
 	
 	}
 
-	public void Login(){
+	public void Login()
+	{
 
 		showSpinner = true;
 
 		ParseUser.LogInAsync(nickname.value, password.value).ContinueWith(t => {
-
 
 			if (t.IsFaulted || t.IsCanceled) {
 				showSpinner = false;

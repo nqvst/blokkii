@@ -16,12 +16,10 @@ public class Camera2DFollow : MonoBehaviour {
 
 	void Start () {
 
-		Screen.showCursor = false;
-
 		setFinishAsTarget();
 		StartCoroutine(ShowFinishTimer(2.0F));
 
-		if( !target ) { enabled = false; return;}
+
 		lastTargetPosition = target.position;
 		offsetZ = (transform.position - target.position).z;
 		transform.parent = null;
@@ -29,6 +27,11 @@ public class Camera2DFollow : MonoBehaviour {
 
 	
 	void FixedUpdate () {
+		if( !target ) { 
+			SetPlayerAsTarget();
+			offsetZ = -10;
+			return;
+		}
 
 		if (Input.anyKeyDown){
 			SetPlayerAsTarget();
