@@ -10,12 +10,12 @@ public class ParseLevel : MonoBehaviour {
 	[SerializeField] Transform playerPrefab;
 	[SerializeField] Transform hudPrefab;
 	[SerializeField] Transform musicPrefab;
+	[SerializeField] Transform finishPrefab;
 
 
 	Transform nextPrefab;
 
 	ParseObject level;
-	string message = "";
 
 	bool built = false;
 
@@ -63,22 +63,18 @@ public class ParseLevel : MonoBehaviour {
 				if(prefabName == "SolidBox"){
 					nextPrefab = groundPrefab;
 				}
+				if(prefabName == "Finish"){
+					nextPrefab = finishPrefab;
+				}
 				Instantiate(nextPrefab, spawnPos, q); 
 			}
 		}
-
-//		Transform music = Instantiate(musicPrefab, Vector3.zero, Quaternion.identity) as Transform;
-//		music.name = "Music";
-//
-//		Transform hud = Instantiate(hudPrefab, Vector3.zero, Quaternion.identity) as Transform;
-//
-
 
 	}
 
 	void Start () {
 		ParseQuery<ParseObject> query = ParseObject.GetQuery("Level");
-		query.GetAsync("5VnQKwa9mz").ContinueWith(t => {
+		query.GetAsync("YEZQhvga6g").ContinueWith(t => {
 			level = t.Result;
 		});
 

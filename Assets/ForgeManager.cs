@@ -6,9 +6,8 @@ using Parse;
 public class ForgeManager : MonoBehaviour 
 {
 
-	[SerializeField] Transform nextPrefab;
 	[SerializeField] Transform [] prefabs;
-	[SerializeField] LayerMask layer;
+	Transform nextPrefab;
 	Transform currentPrefab;
 
 	bool canBuild = true;

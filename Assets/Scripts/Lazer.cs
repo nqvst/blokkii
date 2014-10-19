@@ -27,7 +27,7 @@ public class Lazer : MonoBehaviour {
 		if( isOn ) {
 			Activate ();
 
-			RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.up);	
+			RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.up, 1000, whatToHit);	
 			Vector2 endpoint = transform.up * 1000;
 
 			if ( hit ) {
