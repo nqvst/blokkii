@@ -67,11 +67,11 @@ public class ParseLevel : MonoBehaviour {
 			}
 		}
 
-		Transform music = Instantiate(musicPrefab, Vector3.zero, Quaternion.identity) as Transform;
-		music.name = "Music";
-
-		Transform hud = Instantiate(hudPrefab, Vector3.zero, Quaternion.identity) as Transform;
-		RectTransform rtr = hud.GetComponent<RectTransform>();
+//		Transform music = Instantiate(musicPrefab, Vector3.zero, Quaternion.identity) as Transform;
+//		music.name = "Music";
+//
+//		Transform hud = Instantiate(hudPrefab, Vector3.zero, Quaternion.identity) as Transform;
+//
 
 
 	}

@@ -19,10 +19,11 @@ public class Camera2DFollow : MonoBehaviour {
 		setFinishAsTarget();
 		StartCoroutine(ShowFinishTimer(2.0F));
 
-
-		lastTargetPosition = target.position;
-		offsetZ = (transform.position - target.position).z;
-		transform.parent = null;
+		if(target) {
+			lastTargetPosition = target.position;
+			offsetZ = (transform.position - target.position).z;
+			transform.parent = null;
+		}
 	}
 
 	

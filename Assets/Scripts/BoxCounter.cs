@@ -4,21 +4,28 @@ using UnityEngine.UI;
 
 public class BoxCounter : MonoBehaviour {
 
-	public Build buildScript;
+	Build buildScript;
 	Text text;
-	public const string times = "X";
+
 	void Start () {
-		GameObject player = GameObject.Find("Player");
-		buildScript = player.GetComponent<Build>();
 		text = GetComponent<Text>();
+		SetBuildScript();
 	}
 	
 
 	void LateUpdate () {
-		if(!buildScript ){
-			buildScript = GameObject.Find("Player").GetComponent<Build>();
+		if( !buildScript ){
+			SetBuildScript();
+			return;
 		}
 
 		text.text = buildScript.budget.ToString();
+	}
+
+	void SetBuildScript(){
+		GameObject player = GameObject.Find("Player");
+		if( player ) {
+			buildScript = player.GetComponent<Build>();
+		}
 	}
 }
