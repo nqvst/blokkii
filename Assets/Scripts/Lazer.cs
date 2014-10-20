@@ -48,9 +48,6 @@ public class Lazer : MonoBehaviour {
 
 			if( hit ) {
 				if(hit.collider.transform.CompareTag("Player") ) {
-					//Camera.main.GetComponent<Shake>().shakeNow = true;
-					//hit.collider.rigidbody2D.AddForceAtPosition(-hit.normal * 2000, hit.point);
-					//Invoke("Restart", 0.5f);
 					Restart();
 				}
 

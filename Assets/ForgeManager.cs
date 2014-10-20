@@ -33,6 +33,9 @@ public class ForgeManager : MonoBehaviour
 
 	public bool playMode = false;
 
+	bool levelIsLoaded = false;
+	bool levelIsBuilt = false;
+
 	public virtual Vector3 mousePosition 
 	{
 		get
@@ -42,14 +45,29 @@ public class ForgeManager : MonoBehaviour
 		}
 	}
 
+	void LoadLevel ()
+	{
+		string levelId = GameManager.LEVEL_ID;
+		ParseQuery<ParseObject> query = ParseObject.GetQuery("Level");
+		Debug.Log("before GetAsync");
+		query.GetAsync(levelId).ContinueWith(t => {
+			Debug.Log("inside GetAsync");
+			level = t.Result;
+			levelIsLoaded = true;
+		});
+		Debug.Log("after GetAsync");
+	}
+
 	void Start ()
 	{
 		nextPrefab = solidBoxPrefab;
 		SpawnPrefab();
-		level["name"] = "[untitled]";
+		level["name"] = "Untitled";
 		levelNameInput.value = (string)level["name"];
 		cam = Camera.main.transform;
 		CreateParentLevelObject();
+		LoadLevel();
+
 	}
 	void CreateParentLevelObject(){
 		parentLevelObject = new GameObject();
@@ -87,7 +105,12 @@ public class ForgeManager : MonoBehaviour
 	
 	void Update () 
 	{
+		if(levelIsLoaded && !levelIsBuilt){
+			levelIsBuilt = true;
+			RestoreLevelStateFromLevel();
+		}
 		if(playMode || !canBuild) return;
+
 
 		if(Input.GetMouseButtonDown(0)) {
 
@@ -103,7 +126,6 @@ public class ForgeManager : MonoBehaviour
 			if ( currentPrefab && canBuild){
 				PlacePrefab();
 			}
-			
 		}
 
 		if( currentPrefab && canBuild ) {
@@ -152,43 +174,15 @@ public class ForgeManager : MonoBehaviour
 			Destroy(currentPrefab.gameObject);
 		}
 	}
-
-	public void SolidBoxPrefab()
-	{
-		nextPrefab = solidBoxPrefab;
-		Cancel();
-		SpawnPrefab();
-	}
-	public void BoxPrefab()
-	{
-		nextPrefab = boxPrefab;
-		Cancel();
-		SpawnPrefab();
-	}
-	public void LazerPrefab()
-	{
-		nextPrefab = lazerPrefab;
-		Cancel();
-		SpawnPrefab();
-	}
-	public void StartPointPrefab()
-	{
-		nextPrefab = startPointPrefab;
-		Cancel();
-		SpawnPrefab();
-	}
-	public void FinishPrefab()
-	{
-		nextPrefab = finishPrefab;
-		Cancel();
-		SpawnPrefab();
-	}
-
+	
 	public void SaveLevel()
 	{
 		Debug.Log ("SaveLevel");
 		Debug.Log(levelObjects.Count);
-		if( levelObjects.Count > 0 ){
+		if( levelObjects.Count > 0 && ParseUser.CurrentUser != null){
+			Debug.Log(ParseUser.CurrentUser.Username.ToString());
+			level["creatorName"] = ParseUser.CurrentUser.Username;
+			level["creator"] = ParseUser.CurrentUser;
 			level["name"] = levelNameInput.value;
 			level["objects"] = levelObjects;
 			level.SaveAsync();
@@ -236,10 +230,17 @@ public class ForgeManager : MonoBehaviour
 		CreateParentLevelObject();
 	}
 
+	
+	void RestoreLevelStateFromLevel ()
+	{
+		levelObjects = level.Get<List<object>>("objects");
+		RestoreLevelState();
+	}
+
+
 	void RestoreLevelState ()
 	{
 		Debug.Log(levelObjects.Count.ToString() + " objects in the list" );
-		ClearLevel();
 
 		for( int i = 0;  i < levelObjects.Count; i++){
 			IDictionary dict = (IDictionary) levelObjects[i];
@@ -289,7 +290,9 @@ public class ForgeManager : MonoBehaviour
 		cam.GetComponent<Camera2DFollow>().enabled = playMode;
 		cam.GetComponent<MoveCamera>().enabled = !playMode;
 		if( playMode ){
-			Destroy(currentPrefab.gameObject);
+			if(currentPrefab){
+				Destroy(currentPrefab.gameObject);
+			}
 			SpawnPlayer();
 			SaveLevelState();
 		} else {
@@ -298,6 +301,7 @@ public class ForgeManager : MonoBehaviour
 				Destroy(player.gameObject);
 				Destroy(placeHolderGO);
 			}
+			ClearLevel();
 			RestoreLevelState();
 			SolidBoxPrefab();
 		}
@@ -312,7 +316,41 @@ public class ForgeManager : MonoBehaviour
 		else{
 			Debug.Log("no spawn point");
 		}
-
-
 	}
+
+	public void SolidBoxPrefab()
+	{
+		nextPrefab = solidBoxPrefab;
+		Cancel();
+		SpawnPrefab();
+	}
+
+	public void BoxPrefab()
+	{
+		nextPrefab = boxPrefab;
+		Cancel();
+		SpawnPrefab();
+	}
+
+	public void LazerPrefab()
+	{
+		nextPrefab = lazerPrefab;
+		Cancel();
+		SpawnPrefab();
+	}
+
+	public void StartPointPrefab()
+	{
+		nextPrefab = startPointPrefab;
+		Cancel();
+		SpawnPrefab();
+	}
+
+	public void FinishPrefab()
+	{
+		nextPrefab = finishPrefab;
+		Cancel();
+		SpawnPrefab();
+	}
+
 }

@@ -4,48 +4,95 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using Parse;
 
-public class LevelList : MonoBehaviour {
+public class LevelList : MonoBehaviour 
+{
 
-	[SerializeField] GameObject itemPrefab;
-	[SerializeField] RectTransform listPanel;
-	
-	GameManager gameManager;
+	[SerializeField] GameObject allItemPrefab;
+	[SerializeField] GameObject myItemPrefab;
+	[SerializeField] RectTransform allLevelsListPanel;
+	[SerializeField] RectTransform myLevelsListPanel;
+	[SerializeField] Transform[] loadingPanels;
 
 	public int itemCount = 10, columnCount = 1;
 
-	float offset = 40;
-	IList<ParseObject> levels = new List<ParseObject>();
-	bool listPopulated = false;
+	float offset = 5;
+
+	IList<ParseObject> allLevels = new List<ParseObject>();
+	IList<ParseObject> myLevels = new List<ParseObject>();
+
+	bool allLevelsAreRendered = false;
+	bool myLevelsAreRendered = false;
+
+	bool allLevelsAreLoaded = false;
+	bool myLevelsAreLoaded = false;
+
 	void Start () {
-
-		var query = ParseObject.GetQuery("Level");
-		query.Limit(10); 
-//		query = query.Skip(10);
-		query.FindAsync().ContinueWith(t =>	{
-			IEnumerable<ParseObject> r = t.Result;
-			foreach (ParseObject obj in r){
-				levels.Add (obj);
-			}
-		});
-
-		gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+		FetchAllLevels();
+		FetchMyLevels();
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		if(levels.Count != 0 && !listPopulated){
-			listPopulated = true;
-			PopulateLsíst();
+
+	void FetchMyLevels()
+	{
+		if(ParseUser.CurrentUser != null) {
+			Debug.Log("logged in as " + ParseUser.CurrentUser.Username);
+			var query = ParseObject.GetQuery("Level").WhereEqualTo("creator", ParseUser.CurrentUser);
+			query.FindAsync().ContinueWith(t =>	{
+				IEnumerable<ParseObject> r = t.Result;
+				foreach (ParseObject obj in r){
+					myLevels.Add (obj);
+				}
+				myLevelsAreLoaded = true;
+			});
 		}
 	}
 
-	void PopulateLsíst() {
-		itemCount = levels.Count;
+	void FetchAllLevels(){
+		var query = ParseObject.GetQuery("Level").Limit(10); 
+		query.FindAsync().ContinueWith(t =>	{
+			IEnumerable<ParseObject> r = t.Result;
+			foreach (ParseObject obj in r){
+				allLevels.Add (obj);
+			}
+			allLevelsAreLoaded = true;
+		});
+	}
+
+	void RemoveLoadingPanel ()
+	{
+		Debug.Log("stop loading");
+		foreach (Transform loader in loadingPanels){
+			loader.gameObject.SetActive(false);
+		}
+	}
+	
+	void Update () 
+	{
+		if(allLevelsAreLoaded && !allLevelsAreRendered){
+			allLevelsAreRendered = true;
+			RemoveLoadingPanel();
+			if(allLevels.Count != 0){
+				Debug.Log("more than zero all stuff");
+				PopulateLsíst(allLevels, allLevelsListPanel, allItemPrefab, false);
+			}
+		}
+
+		if(myLevelsAreLoaded && !myLevelsAreRendered){
+			myLevelsAreRendered = true;
+			RemoveLoadingPanel();
+			if(myLevels.Count != 0 ){
+				Debug.Log("more than zero my stuff");
+				PopulateLsíst(myLevels, myLevelsListPanel, myItemPrefab, true);
+			}
+		}
+	}
+
+	void PopulateLsíst( IList<ParseObject> levelList , Transform panel, GameObject itemPrefab, bool forge ) 
+	{
+		itemCount = levelList.Count;
 
 		RectTransform rowRectTransform = itemPrefab.GetComponent<RectTransform>();
-		RectTransform containerRectTransform = listPanel.GetComponent<RectTransform>();
-		
-		//calculate the width and height of each child item.
+		RectTransform containerRectTransform = panel.GetComponent<RectTransform>();
+
 		float width = containerRectTransform.rect.width / columnCount;
 		float ratio = width / rowRectTransform.rect.width;
 		float height = rowRectTransform.rect.height * ratio;
@@ -61,41 +108,56 @@ public class LevelList : MonoBehaviour {
 		int j = 0;
 		int i = 0;
 
-		foreach( ParseObject obj in levels)
+		foreach( ParseObject obj in levelList)
 		{
-			//this is used instead of a double for loop because itemCount may not fit perfectly into the rows/columns
-			i++;
 			if (i % columnCount == 0)
 				j++;
 
 			string levelId = obj.ObjectId;
 			string levelName = obj.Get<string>("name");
+			string creatorName = obj.Get<string>("creatorName");
 
-			//create a new item, name it, and set the parent
 			GameObject newItem = Instantiate(itemPrefab) as GameObject;
 			newItem.name = "item at (" + i + "," + j + ")";
+
 			Button newItemButton = newItem.GetComponentInChildren<Button>();
-			newItemButton.onClick.AddListener(() => { LoadParseLevel(levelId); });
+			if ( forge ) {
+				newItemButton.onClick.AddListener(() => { ForgeParseLevel(levelId); });
+			} else {
+				newItemButton.onClick.AddListener(() => { LoadParseLevel(levelId); });
+			}
+
+			Text newItemCreatedBy = newItem.transform.FindChild("CreatedBy").GetComponent<Text>();
+			newItemCreatedBy.text = "By: " + creatorName;
+
 			Text newItemText = newItem.transform.FindChild("Title").GetComponent<Text>();
 			newItemText.text = levelName;
-			newItem.transform.parent = listPanel.transform;
-			
-			//move and size the new item
+
+			newItem.transform.parent = panel.transform;
+
 			RectTransform rectTransform = newItem.GetComponent<RectTransform>();
 			
 			float x = -containerRectTransform.rect.width / 2 + width * (i % columnCount);
 			float y = containerRectTransform.rect.height / 2 - height * j;
 			rectTransform.offsetMin = new Vector2(x, y);
 			
-			x = rectTransform.offsetMin.x + width;
-			y = rectTransform.offsetMin.y + height;
+			x = rectTransform.offsetMin.x + width - offset;
+			y = rectTransform.offsetMin.y + height - offset;
 			rectTransform.offsetMax = new Vector2(x, y);
+
+			i++;
 		}
 	}
 
 	public void LoadParseLevel(string levelID) {
 		Debug.Log("clicked " + levelID);
-		gameManager.setLevelId(levelID);
+		GameManager.LoadParseLevel(levelID);
 	}
+
+	public void ForgeParseLevel(string levelID) {
+		Debug.Log("clicked " + levelID);
+		GameManager.ForgeParseLevel(levelID);
+	}
+
 
 }

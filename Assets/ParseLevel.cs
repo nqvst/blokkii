@@ -76,10 +76,10 @@ public class ParseLevel : MonoBehaviour {
 
 	}
 	void Start () {
-		gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-		levelId = gameManager.levelId;
+		//gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+		levelId = GameManager.LEVEL_ID;
 		if(levelId != ""){
-			LoadLevel(gameManager.levelId);
+			LoadLevel(GameManager.LEVEL_ID);
 		}
 	}
 
