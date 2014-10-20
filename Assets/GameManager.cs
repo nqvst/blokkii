@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using Parse;
 
 public class GameManager : MonoBehaviour {
-
-	public string levelId = "";
 	
+	public string levelId = "";
+
 	void Start(){
 		DontDestroyOnLoad(gameObject);
 	}

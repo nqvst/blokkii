@@ -16,6 +16,7 @@ public class PlaceHolder : MonoBehaviour {
 	OverlapCheck innerCheck;
 	
 	private Build buildScript;
+
 	void Start () 
 	{
 		GameObject player = GameObject.Find("Player");
@@ -32,7 +33,6 @@ public class PlaceHolder : MonoBehaviour {
 	
 	void Update () 
 	{
-
 		canBuild = !innerCheck.overlaping && buildScript.budget > 0;
 
 		canRemove = innerCheck.overlaping;

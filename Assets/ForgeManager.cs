@@ -6,13 +6,22 @@ using Parse;
 
 public class ForgeManager : MonoBehaviour 
 {
+	
+	[SerializeField] Transform lazerPrefab;
+	[SerializeField] Transform solidBoxPrefab;
+	[SerializeField] Transform boxPrefab;
+	[SerializeField] Transform startPointPrefab;
+	[SerializeField] Transform finishPrefab;
 
-	[SerializeField] Transform [] prefabs;
 	[SerializeField] InputField levelNameInput;
 	Transform nextPrefab;
 	Transform currentPrefab;
 	Transform selectedPrefab;
 
+	Transform cam;
+	Transform player;
+	[SerializeField] Transform playerPrefab;
+	[SerializeField] Transform startPoint;
 
 	[SerializeField] LayerMask whatToHit;
 	bool canBuild = true;
@@ -33,10 +42,11 @@ public class ForgeManager : MonoBehaviour
 
 	void Start ()
 	{
-		nextPrefab = prefabs[0];
+		nextPrefab = solidBoxPrefab;
 		SpawnPrefab();
 		level["name"] = "[untitled]";
 		levelNameInput.value = (string)level["name"];
+		cam = Camera.main.transform;
 	}
 
 	void SpawnPrefab ()
@@ -62,7 +72,6 @@ public class ForgeManager : MonoBehaviour
 	{
 		currentPrefab.transform.Rotate(0, 0, -90);
 	}
-
 	
 	void Update () 
 	{
@@ -132,9 +141,33 @@ public class ForgeManager : MonoBehaviour
 		}
 	}
 
-	public void SetNextPrefab(int index)
+	public void SolidBoxPrefab()
 	{
-		nextPrefab = prefabs[index];
+		nextPrefab = solidBoxPrefab;
+		Cancel();
+		SpawnPrefab();
+	}
+	public void BoxPrefab()
+	{
+		nextPrefab = boxPrefab;
+		Cancel();
+		SpawnPrefab();
+	}
+	public void LazerPrefab()
+	{
+		nextPrefab = lazerPrefab;
+		Cancel();
+		SpawnPrefab();
+	}
+	public void StartPointPrefab()
+	{
+		nextPrefab = startPointPrefab;
+		Cancel();
+		SpawnPrefab();
+	}
+	public void FinishPrefab()
+	{
+		nextPrefab = finishPrefab;
 		Cancel();
 		SpawnPrefab();
 	}
@@ -175,7 +208,73 @@ public class ForgeManager : MonoBehaviour
 		};
 	}
 
-	public void test(){
-		Debug.Log("it cklickedd");
+	void SaveLevelState ()
+	{
+		//level.SaveAsync();
+	}
+
+	void RestoreLevelState ()
+	{
+		Debug.Log(levelObjects.Count.ToString() + " objects in the list" );
+		
+		for( int i = 0;  i < levelObjects.Count; i++){
+			IDictionary dict = (IDictionary) levelObjects[i];
+			
+			IDictionary pos = (IDictionary) dict["position"];
+			IDictionary rot = (IDictionary) dict["rotation"];
+			
+			Vector2 spawnPos = new Vector2(float.Parse(pos["x"].ToString()),
+			                               float.Parse(pos["y"].ToString()));
+			
+			Vector3 spawnRot = new Vector3(float.Parse(rot["x"].ToString()),
+			                               float.Parse(rot["y"].ToString()),
+			                               float.Parse(rot["z"].ToString()));
+			Quaternion q = Quaternion.Euler(spawnRot);
+
+			string prefabName = dict["type"].ToString();
+			if(!GameObject.Find(dict["name"].ToString())){
+				if(prefabName == "BuildBox"){
+					nextPrefab = boxPrefab;
+				}
+				if(prefabName == "Lazer"){
+					nextPrefab = lazerPrefab;
+				}
+				if(prefabName == "SolidBox"){
+					nextPrefab = solidBoxPrefab;
+				}
+				if(prefabName == "Finish"){
+					nextPrefab = finishPrefab;
+				}
+				Transform newObj = Instantiate(nextPrefab, spawnPos, q) as Transform;
+				newObj.name = dict["name"].ToString();
+			}
+
+		}
+
+	}
+
+	public void TogglePlayMode(){
+		playMode = !playMode;
+		cam.GetComponent<Camera2DFollow>().enabled = playMode;
+		cam.GetComponent<MoveCamera>().enabled = !playMode;
+		if( playMode ){
+			SpawnPlayer();
+			SaveLevelState();
+		} else if( player ){
+			GameObject placeHolderGO = GameObject.FindGameObjectWithTag("Placeholder");
+			Destroy(player.gameObject);
+			Destroy(placeHolderGO);
+			RestoreLevelState();
+		}
+	}
+
+	void SpawnPlayer(){
+		GameObject startpointGO = GameObject.FindGameObjectWithTag("Spawnpoint");
+		if( startpointGO ) {
+			startPoint = startpointGO.transform;
+			player = Instantiate(playerPrefab, startPoint.position, Quaternion.identity) as Transform;
+			player.name = "Player";
+		}
+
 	}
 }
