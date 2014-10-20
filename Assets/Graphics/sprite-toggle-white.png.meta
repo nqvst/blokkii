@@ -54,70 +54,70 @@ TextureImporter:
     - name: sprite-toggle-white_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 68
-        width: 34
-        height: 34
+        x: 3
+        y: 71
+        width: 28
+        height: 28
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: sprite-toggle-white_1
       rect:
         serializedVersion: 2
-        x: 34
-        y: 68
-        width: 34
-        height: 34
+        x: 37
+        y: 71
+        width: 28
+        height: 28
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: sprite-toggle-white_2
       rect:
         serializedVersion: 2
-        x: 68
-        y: 68
-        width: 34
-        height: 34
+        x: 71
+        y: 71
+        width: 28
+        height: 28
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: sprite-toggle-white_3
       rect:
         serializedVersion: 2
-        x: 0
-        y: 34
-        width: 34
-        height: 34
+        x: 3
+        y: 37
+        width: 28
+        height: 28
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: sprite-toggle-white_4
       rect:
         serializedVersion: 2
-        x: 34
-        y: 34
-        width: 34
-        height: 34
+        x: 37
+        y: 37
+        width: 28
+        height: 28
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: sprite-toggle-white_5
       rect:
         serializedVersion: 2
-        x: 68
-        y: 34
-        width: 34
-        height: 34
+        x: 71
+        y: 37
+        width: 28
+        height: 28
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: sprite-toggle-white_6
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 34
-        height: 34
+        x: 3
+        y: 3
+        width: 28
+        height: 28
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
