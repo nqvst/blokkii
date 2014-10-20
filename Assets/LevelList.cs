@@ -141,7 +141,7 @@ public class LevelList : MonoBehaviour
 			float y = containerRectTransform.rect.height / 2 - height * j;
 			rectTransform.offsetMin = new Vector2(x, y);
 			
-			x = rectTransform.offsetMin.x + width - offset;
+			x = rectTransform.offsetMin.x + width;
 			y = rectTransform.offsetMin.y + height - offset;
 			rectTransform.offsetMax = new Vector2(x, y);
 
@@ -151,13 +151,21 @@ public class LevelList : MonoBehaviour
 
 	public void LoadParseLevel(string levelID) {
 		Debug.Log("clicked " + levelID);
-		GameManager.LoadParseLevel(levelID);
+		GameManager.instance.LoadParseLevel(levelID);
 	}
 
 	public void ForgeParseLevel(string levelID) {
 		Debug.Log("clicked " + levelID);
 		GameManager.ForgeParseLevel(levelID);
 	}
+
+	public void LoadForge()
+	{
+		GameManager.LEVEL_ID = "";
+		GameManager.instance.LoadLevel("Forge");
+	}
+
+
 
 
 }

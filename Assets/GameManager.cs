@@ -8,36 +8,62 @@ public class GameManager : MonoBehaviour {
 	public static bool forgeMode = false;
 	public static string LEVEL_ID = "";
 
-	const string PARSE_LOADED_LEVEL = "ComunityLevel";
-	const string FORGE_LEVEL = "Forge";
-	void Start(){
-		DontDestroyOnLoad(gameObject);
+	public const string PARSE_LOADED_LEVEL = "ComunityLevel";
+	public const string COMUNITY_LEVEL_MENU = "CustomLevelMenu";
+	public const string FORGE_LEVEL = "Forge";
+
+	static GameManager _instance;
+
+	private GameManager () {}
+
+	public static bool isActive { 
+		get { 
+			return _instance != null; 
+		} 
+	}
+	
+	public static GameManager instance
+	{
+		get
+		{
+			if (_instance == null)
+			{
+				_instance = Object.FindObjectOfType(typeof(GameManager)) as GameManager;
+				
+				if (_instance == null)
+				{
+					GameObject go = new GameObject("GameManager");
+					DontDestroyOnLoad(go);
+					_instance = go.AddComponent<GameManager>();
+				}
+			}
+			return _instance;
+		}
 	}
 
 	public static void setLevelId (string objectId) {
 		LEVEL_ID = objectId;
-		//Invoke ("StartLevel", 0.1f);
 	}
 
 	void StartLevel() {
 		Application.LoadLevel(PARSE_LOADED_LEVEL);
 	}
 
-	public static void RestartLevel(){
+	public void RestartLevel(){
 		Application.LoadLevel(Application.loadedLevel);
 	}
 
-	public static void LoadLevel(string levelToLoad) 
+	public void LoadLevel(string levelToLoad) 
 	{
 		Application.LoadLevel( levelToLoad );
 	}
 
-	public static void LoadLevel(int levelToLoad) 
+	public void LoadLevel(int levelToLoad) 
 	{
 		Application.LoadLevel( levelToLoad );
 	}
 
-	public static void LoadParseLevel(string levelID) 
+	public void LoadParseLevel(string levelID) 
 	{
 		LEVEL_ID = levelID;
 		Application.LoadLevel(PARSE_LOADED_LEVEL);

@@ -353,4 +353,7 @@ public class ForgeManager : MonoBehaviour
 		SpawnPrefab();
 	}
 
+	public void BackToMenu(){
+		GameManager.instance.LoadLevel(GameManager.COMUNITY_LEVEL_MENU);
+	}
 }
