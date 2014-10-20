@@ -23,6 +23,8 @@ public class ForgeManager : MonoBehaviour
 	[SerializeField] Transform playerPrefab;
 	[SerializeField] Transform startPoint;
 
+	GameObject parentLevelObject;
+
 	[SerializeField] LayerMask whatToHit;
 	bool canBuild = true;
 
@@ -47,6 +49,11 @@ public class ForgeManager : MonoBehaviour
 		level["name"] = "[untitled]";
 		levelNameInput.value = (string)level["name"];
 		cam = Camera.main.transform;
+		CreateParentLevelObject();
+	}
+	void CreateParentLevelObject(){
+		parentLevelObject = new GameObject();
+		parentLevelObject.transform.name = "ParentLevelObject";
 	}
 
 	void SpawnPrefab ()
@@ -59,7 +66,12 @@ public class ForgeManager : MonoBehaviour
 	{
 		currentPrefab.position = new Vector2 (Mathf.RoundToInt(currentPrefab.position.x) , Mathf.RoundToInt(currentPrefab.position.y) ); 
 		AddObjectToLevel(currentPrefab.name, currentPrefab.position, currentPrefab.rotation.eulerAngles);
+		if(currentPrefab.CompareTag("Spawnpoint")){
+			startPoint = currentPrefab;
+		}
+		currentPrefab.parent = parentLevelObject.transform;
 		currentPrefab = null;
+
 		SpawnPrefab();
 	}
 
@@ -75,7 +87,7 @@ public class ForgeManager : MonoBehaviour
 	
 	void Update () 
 	{
-		if(playMode) return;
+		if(playMode || !canBuild) return;
 
 		if(Input.GetMouseButtonDown(0)) {
 
@@ -176,10 +188,11 @@ public class ForgeManager : MonoBehaviour
 	{
 		Debug.Log ("SaveLevel");
 		Debug.Log(levelObjects.Count);
-		level["name"] = levelNameInput.value;
-		level["objects"] = levelObjects;
-
-		level.SaveAsync();
+		if( levelObjects.Count > 0 ){
+			level["name"] = levelNameInput.value;
+			level["objects"] = levelObjects;
+			level.SaveAsync();
+		}
 	}
 
 	public void OnMouseEnterMenu()
@@ -213,10 +226,21 @@ public class ForgeManager : MonoBehaviour
 		//level.SaveAsync();
 	}
 
+	void ClearLevel ()
+	{
+		Destroy(parentLevelObject);
+		foreach (Box b in FindObjectsOfType<Box>()){
+			Destroy(b.gameObject);
+		}
+
+		CreateParentLevelObject();
+	}
+
 	void RestoreLevelState ()
 	{
 		Debug.Log(levelObjects.Count.ToString() + " objects in the list" );
-		
+		ClearLevel();
+
 		for( int i = 0;  i < levelObjects.Count; i++){
 			IDictionary dict = (IDictionary) levelObjects[i];
 			
@@ -232,49 +256,63 @@ public class ForgeManager : MonoBehaviour
 			Quaternion q = Quaternion.Euler(spawnRot);
 
 			string prefabName = dict["type"].ToString();
-			if(!GameObject.Find(dict["name"].ToString())){
-				if(prefabName == "BuildBox"){
-					nextPrefab = boxPrefab;
-				}
-				if(prefabName == "Lazer"){
-					nextPrefab = lazerPrefab;
-				}
-				if(prefabName == "SolidBox"){
-					nextPrefab = solidBoxPrefab;
-				}
-				if(prefabName == "Finish"){
-					nextPrefab = finishPrefab;
-				}
-				Transform newObj = Instantiate(nextPrefab, spawnPos, q) as Transform;
-				newObj.name = dict["name"].ToString();
+
+			if(prefabName == "BuildBox"){
+				nextPrefab = boxPrefab;
 			}
+			if(prefabName == "Lazer"){
+				nextPrefab = lazerPrefab;
+			}
+			if(prefabName == "SolidBox"){
+				nextPrefab = solidBoxPrefab;
+			}
+			if(prefabName == "Finish"){
+				nextPrefab = finishPrefab;
+			}
+			if(prefabName == "Spawnpoint"){
+				nextPrefab = startPointPrefab;
+			}
+			Transform newObj = Instantiate(nextPrefab, spawnPos, q) as Transform;
+			newObj.name = dict["name"].ToString();
+			if(newObj.CompareTag("Spawnpoint")){
+				startPoint = newObj;
+				Debug.Log("Spawnpoint found in restore");
+			}
+			newObj.parent = parentLevelObject.transform;
 
 		}
-
 	}
 
-	public void TogglePlayMode(){
+	public void TogglePlayMode()
+	{
 		playMode = !playMode;
 		cam.GetComponent<Camera2DFollow>().enabled = playMode;
 		cam.GetComponent<MoveCamera>().enabled = !playMode;
 		if( playMode ){
+			Destroy(currentPrefab.gameObject);
 			SpawnPlayer();
 			SaveLevelState();
-		} else if( player ){
-			GameObject placeHolderGO = GameObject.FindGameObjectWithTag("Placeholder");
-			Destroy(player.gameObject);
-			Destroy(placeHolderGO);
+		} else {
+			if( player ){
+				GameObject placeHolderGO = GameObject.FindGameObjectWithTag("Placeholder");
+				Destroy(player.gameObject);
+				Destroy(placeHolderGO);
+			}
 			RestoreLevelState();
+			SolidBoxPrefab();
 		}
 	}
 
-	void SpawnPlayer(){
-		GameObject startpointGO = GameObject.FindGameObjectWithTag("Spawnpoint");
-		if( startpointGO ) {
-			startPoint = startpointGO.transform;
+	void SpawnPlayer()
+	{
+		if(startPoint){
 			player = Instantiate(playerPrefab, startPoint.position, Quaternion.identity) as Transform;
 			player.name = "Player";
 		}
+		else{
+			Debug.Log("no spawn point");
+		}
+
 
 	}
 }

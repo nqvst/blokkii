@@ -16,6 +16,8 @@ public class ParseLevel : MonoBehaviour {
 	ParseObject level;
 
 	bool built = false;
+	bool startBuilt = false;
+	bool finishBuilt = false;
 
 	Vector2 GetVector2 (IDictionary vector)
 	{
@@ -49,10 +51,16 @@ public class ParseLevel : MonoBehaviour {
 			Debug.Log(dict["type"]);
 
 			string prefabName = dict["type"].ToString();
-			if(prefabName == "Spawnpoint"){
+			if (prefabName == "Spawnpoint" && !startBuilt){
 				Transform player =  Instantiate(playerPrefab, spawnPos, Quaternion.identity) as Transform; 
 				player.name = "Player";
-			}else{
+				startBuilt = true;
+			} else if (prefabName == "Finish"){
+				if (!finishBuilt) {
+					Instantiate(finishPrefab, spawnPos, q); 
+					finishBuilt = true;
+				}
+			} else {
 				if(prefabName == "BuildBox"){
 					nextPrefab = boxPrefab;
 				}
@@ -61,9 +69,6 @@ public class ParseLevel : MonoBehaviour {
 				}
 				if(prefabName == "SolidBox"){
 					nextPrefab = groundPrefab;
-				}
-				if(prefabName == "Finish"){
-					nextPrefab = finishPrefab;
 				}
 				Instantiate(nextPrefab, spawnPos, q); 
 			}
