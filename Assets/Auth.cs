@@ -33,8 +33,14 @@ public class Auth : MonoBehaviour
 	Task loginTask;
 	Task signUpTask;
 
+	float targetAlpha = 0f;
+
+	public CanvasGroup canvasGroup;
+
 	void Start () 
 	{
+		canvasGroup = GetComponent<CanvasGroup>();
+		canvasGroup.alpha = 0f;
 		CheckAuth();
 		if( auth ) {
 			transform.SendMessageUpwards( "OnLoginSuccess" , SendMessageOptions.RequireReceiver);
@@ -42,7 +48,6 @@ public class Auth : MonoBehaviour
 			HideFeedbackMessage();
 			ShowSignIn();
 		}
-		gameObject.SetActive(!auth);
 
 	}
 
@@ -56,7 +61,13 @@ public class Auth : MonoBehaviour
 	}
 
 	public void HideAuthWindow() {
-		transform.gameObject.SetActive(false);
+		targetAlpha = 0;
+		canvasGroup.blocksRaycasts = false;
+	}
+
+	public void Show(){
+		targetAlpha = 1;
+		canvasGroup.blocksRaycasts = true;
 	}
 
 	void ShowFeedbackMessage(string msg){
@@ -71,7 +82,9 @@ public class Auth : MonoBehaviour
 		feedbackMessagePanel.gameObject.SetActive(false);
 	}
 
-	public void ShowPasswordReset(){
+	public void ShowPasswordReset()
+	{
+
 		titleText.text = RESET_TITLE;
 		submitButtonText.text = RESET_BUTTON_LABEL;
 
@@ -89,6 +102,7 @@ public class Auth : MonoBehaviour
 
 	public void ShowSignUp () 
 	{
+
 		titleText.text = SIGN_UP_TITLE;
 		submitButtonText.text = SIGN_UP_BUTTON_LABEL;
 
@@ -107,6 +121,7 @@ public class Auth : MonoBehaviour
 
 	public void ShowSignIn () 
 	{
+
 		titleText.text = SIGN_IN_TITLE;
 		submitButtonText.text = SIGN_IN_BUTTON_LABEL;
 
@@ -162,15 +177,14 @@ public class Auth : MonoBehaviour
 
 	void Update(){
 
-		if(ParseUser.CurrentUser != null){
-			StartCoroutine("AuthPanelTimer");
-		}
+		auth = (ParseUser.CurrentUser != null );
+		targetAlpha = auth ? 0 : 1;
+		canvasGroup.alpha = Mathf.Lerp(canvasGroup.alpha, targetAlpha, Time.deltaTime * 4);
+		canvasGroup.blocksRaycasts = !auth;
 
 		if(loginTask != null){
 			if (loginTask.IsCompleted && ParseUser.CurrentUser != null){
-				Debug.Log("success");
-				ShowFeedbackMessage("Welcome " + ParseUser.CurrentUser.Username);
-				transform.SendMessageUpwards( "OnLoginSuccess" , SendMessageOptions.RequireReceiver);
+				LoginSuccess();
 				loginTask = null;
 			}else if (loginTask.IsFaulted) {
 				Debug.Log("Fault");
@@ -181,8 +195,7 @@ public class Auth : MonoBehaviour
 
 		if(signUpTask != null){
 			if (signUpTask.IsCompleted && ParseUser.CurrentUser != null){
-				ShowFeedbackMessage("Welcome " + ParseUser.CurrentUser.Username);
-				Debug.Log("success");
+				LoginSuccess();
 				signUpTask = null;
 			}else if (signUpTask.IsFaulted){
 				ShowFeedbackMessage("Something went wrong during the registration, try again later");
@@ -193,8 +206,28 @@ public class Auth : MonoBehaviour
 		}
 	}
 
-	public void LogOut(){
+	void LoginSuccess()
+	{
+		ShowFeedbackMessage("Welcome " + ParseUser.CurrentUser.Username);
+		Debug.Log("success");
+		transform.SendMessageUpwards( "OnLoginSuccess" , SendMessageOptions.RequireReceiver);
+		ResetInputFields();
+	}
+	
+	void ResetInputFields()
+	{
+		passwordInput.value = "";
+		usernameInput.value = "";
+		emailInput.value = "";
+	}
+
+	public void LogOut()
+	{
+		Debug.Log("Loging out...");
 		ParseUser.LogOut();
+		ShowSignIn();
+		transform.SendMessageUpwards( "OnLogUut" , SendMessageOptions.RequireReceiver);
+
 	}
 
 	public IEnumerator FeedbackMessageTimer(){

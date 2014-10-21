@@ -13,8 +13,6 @@ public class LevelList : MonoBehaviour
 	[SerializeField] RectTransform myLevelsListPanel;
 	[SerializeField] Transform[] loadingPanels;
 
-	public int itemCount = 10, columnCount = 1;
-
 	float offset = 5;
 
 	IList<ParseObject> allLevels = new List<ParseObject>();
@@ -72,7 +70,7 @@ public class LevelList : MonoBehaviour
 			RemoveLoadingPanel();
 			if(allLevels.Count != 0){
 				Debug.Log("more than zero all stuff");
-				PopulateLsíst(allLevels, allLevelsListPanel, allItemPrefab, false);
+				PopulateLsíst(allLevels, allLevelsListPanel, allItemPrefab, false, 2);
 			}
 		}
 
@@ -81,25 +79,27 @@ public class LevelList : MonoBehaviour
 			RemoveLoadingPanel();
 			if(myLevels.Count != 0 ){
 				Debug.Log("more than zero my stuff");
-				PopulateLsíst(myLevels, myLevelsListPanel, myItemPrefab, true);
+				PopulateLsíst(myLevels, myLevelsListPanel, myItemPrefab, true, 1);
 			}
 		}
 	}
 
-	void PopulateLsíst( IList<ParseObject> levelList , Transform panel, GameObject itemPrefab, bool forge ) 
+	void PopulateLsíst( IList<ParseObject> levelList , Transform panel, GameObject itemPrefab, bool forge, int collumns ) 
 	{
-		itemCount = levelList.Count;
+		int itemCount = levelList.Count;
+		Debug.Log (itemCount);
 
 		RectTransform rowRectTransform = itemPrefab.GetComponent<RectTransform>();
 		RectTransform containerRectTransform = panel.GetComponent<RectTransform>();
 
-		float width = containerRectTransform.rect.width / columnCount;
+		float width = containerRectTransform.rect.width / collumns;
 		float ratio = width / rowRectTransform.rect.width;
 		float height = rowRectTransform.rect.height * ratio;
-		int rowCount = itemCount / columnCount;
+		int rowCount = itemCount / collumns;
 		if (itemCount % rowCount > 0)
 			rowCount++;
-		
+
+		Debug.Log(rowCount);
 		//adjust the height of the container so that it will just barely fit all its children
 		float scrollHeight = height * rowCount;
 		containerRectTransform.offsetMin = new Vector2(containerRectTransform.offsetMin.x, -scrollHeight / 2);
@@ -110,7 +110,7 @@ public class LevelList : MonoBehaviour
 
 		foreach( ParseObject obj in levelList)
 		{
-			if (i % columnCount == 0)
+			if (i % collumns == 0)
 				j++;
 
 			string levelId = obj.ObjectId;
@@ -137,11 +137,11 @@ public class LevelList : MonoBehaviour
 
 			RectTransform rectTransform = newItem.GetComponent<RectTransform>();
 			
-			float x = -containerRectTransform.rect.width / 2 + width * (i % columnCount);
+			float x = -containerRectTransform.rect.width / 2 + width * (i % collumns);
 			float y = containerRectTransform.rect.height / 2 - height * j;
 			rectTransform.offsetMin = new Vector2(x, y);
 			
-			x = rectTransform.offsetMin.x + width;
+			x = rectTransform.offsetMin.x + width - offset;
 			y = rectTransform.offsetMin.y + height - offset;
 			rectTransform.offsetMax = new Vector2(x, y);
 

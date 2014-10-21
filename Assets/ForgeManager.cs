@@ -39,6 +39,8 @@ public class ForgeManager : MonoBehaviour
 	bool levelIsBuilt = false;
 	bool overMenu = false;
 
+
+
 	public virtual Vector3 mousePosition 
 	{
 		get
@@ -50,10 +52,19 @@ public class ForgeManager : MonoBehaviour
 
 	void Start ()
 	{
+
 		gameManager = GameManager.instance;
 		cam = Camera.main.transform;
 		cam.GetComponent<MoveCamera>().enabled = false;
 		showLogin = true;
+		DestroyCurrentPrefab();
+	}
+
+	void DestroyCurrentPrefab ()
+	{
+		if(currentPrefab){
+			Destroy(currentPrefab.gameObject);
+		}
 	}
 
 	void Init() 
@@ -76,6 +87,14 @@ public class ForgeManager : MonoBehaviour
 			Init();
 		} else {
 			ShowLogin();
+		}
+	}
+
+	public void OnLogUut()
+	{
+		if(ParseUser.CurrentUser == null){
+			showLogin = true;
+			cam.GetComponent<MoveCamera>().enabled = false;
 		}
 	}
 
@@ -304,9 +323,7 @@ public class ForgeManager : MonoBehaviour
 
 	void Cancel()
 	{
-		if(currentPrefab){
-			Destroy(currentPrefab.gameObject);
-		}
+		DestroyCurrentPrefab();
 	}
 
 	public void SaveLevelToParse()
