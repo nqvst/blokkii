@@ -14,6 +14,8 @@ public class Auth : MonoBehaviour
 	[SerializeField] InputField passwordInput;
 	[SerializeField] InputField emailInput;
 	[SerializeField] Button submitButton;
+	[SerializeField] Button forgotPasswordButton;
+	[SerializeField] Button showSignUpButton;
 	[SerializeField] Text submitButtonText;
 
 	[SerializeField] Text feedbackMessage;
@@ -32,14 +34,18 @@ public class Auth : MonoBehaviour
 		CheckAuth();
 		gameObject.SetActive(auth);
 		GameManager.instance.playMode = !auth;
-		ShowSignUp();
+		ShowSignIn();
 	}
 
 	void CheckAuth(){
 		if(ParseUser.CurrentUser != null){
-			Debug.Log ("user is logged in as " + ParseUser.CurrentUser);
+			Debug.Log ("user is logged in as " + ParseUser.CurrentUser.Username);
 			auth = true;
 		}
+	}
+
+	public void HideAuthWindow() {
+
 	}
 
 	public void ShowSignUp () 
@@ -47,6 +53,9 @@ public class Auth : MonoBehaviour
 		titleText.text = SIGN_UP_TITLE;
 		emailInput.gameObject.SetActive(true);
 		submitButtonText.text = SIGN_UP_BUTTON_LABEL;
+		showSignUpButton.gameObject.SetActive(false);
+		forgotPasswordButton.gameObject.SetActive(false);
+
 		submitButton.onClick.AddListener(() => { SignUp(); });
 	}
 
@@ -54,7 +63,10 @@ public class Auth : MonoBehaviour
 	{
 		titleText.text = SIGN_IN_TITLE;
 		emailInput.gameObject.SetActive(false);
+		showSignUpButton.gameObject.SetActive(true);
+		forgotPasswordButton.gameObject.SetActive(true);
 		submitButtonText.text = SIGN_IN_BUTTON_LABEL;
+
 		submitButton.onClick.AddListener(() => { SignIn(); });
 	}
 
@@ -71,9 +83,6 @@ public class Auth : MonoBehaviour
 			Password = passwordInput.value,
 			Email = emailInput.value
 		};
-		
-		// other fields can be set just like with ParseObject
-		user["phone"] = "415-392-0202";
 		
 		signUpTask = user.SignUpAsync();
 	}
@@ -93,6 +102,16 @@ public class Auth : MonoBehaviour
 				Debug.Log("success");
 			}
 			if (loginTask.IsFaulted){
+				Debug.Log("Fault");
+			}
+		}
+
+		if(signUpTask != null){
+			if (signUpTask.IsCompleted){
+				Debug.Log("success");
+				Debug.Log(ParseUser.CurrentUser.Username);
+			}
+			if (signUpTask.IsFaulted){
 				Debug.Log("Fault");
 			}
 		}
