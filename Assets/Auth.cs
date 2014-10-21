@@ -16,6 +16,7 @@ public class Auth : MonoBehaviour
 	[SerializeField] Button submitButton;
 	[SerializeField] Button forgotPasswordButton;
 	[SerializeField] Button showSignUpButton;
+	[SerializeField] Button showSignInButton;
 	[SerializeField] Text submitButtonText;
 	[SerializeField] Transform feedbackMessagePanel;
 	[SerializeField] Text feedbackMessage;
@@ -35,10 +36,14 @@ public class Auth : MonoBehaviour
 	void Start () 
 	{
 		CheckAuth();
-		gameObject.SetActive(auth);
-		GameManager.instance.playMode = auth;
-		HideFeedbackMessage();
-		ShowSignIn();
+		if( auth ) {
+			transform.SendMessageUpwards( "OnLoginSuccess" , SendMessageOptions.RequireReceiver);
+		}else {
+			HideFeedbackMessage();
+			ShowSignIn();
+		}
+		gameObject.SetActive(!auth);
+
 	}
 
 	void CheckAuth() {
@@ -47,6 +52,7 @@ public class Auth : MonoBehaviour
 			auth = true;
 			ShowFeedbackMessage("Welcome " + ParseUser.CurrentUser.Username);
 			HideAuthWindow();
+			StopAllCoroutines();
 		}
 	}
 
@@ -69,34 +75,52 @@ public class Auth : MonoBehaviour
 	public void ShowPasswordReset(){
 		titleText.text = RESET_TITLE;
 		submitButtonText.text = RESET_BUTTON_LABEL;
-		submitButton.onClick.AddListener(() => { ResetPassword(); });
+
 		emailInput.gameObject.SetActive(true);
-		showSignUpButton.gameObject.SetActive(true);
-		forgotPasswordButton.gameObject.SetActive(false);
 		passwordInput.gameObject.SetActive(false);
 		usernameInput.gameObject.SetActive(false);
+
+		showSignUpButton.gameObject.SetActive(true);
+		showSignInButton.gameObject.SetActive(true);
+		forgotPasswordButton.gameObject.SetActive(false);
+
+		submitButton.onClick.RemoveAllListeners();
+		submitButton.onClick.AddListener(() => { ResetPassword(); });
 	}
 
 	public void ShowSignUp () 
 	{
 		titleText.text = SIGN_UP_TITLE;
-		emailInput.gameObject.SetActive(true);
 		submitButtonText.text = SIGN_UP_BUTTON_LABEL;
 
-		showSignUpButton.gameObject.SetActive(false);
-		forgotPasswordButton.gameObject.SetActive(false);
+		usernameInput.gameObject.SetActive(true);
+		passwordInput.gameObject.SetActive(true);
+		emailInput.gameObject.SetActive(true);
 
+
+		showSignInButton.gameObject.SetActive(true);
+		showSignUpButton.gameObject.SetActive(false);
+		forgotPasswordButton.gameObject.SetActive(true);
+
+		submitButton.onClick.RemoveAllListeners();
 		submitButton.onClick.AddListener(() => { SignUp(); });
 	}
 
 	public void ShowSignIn () 
 	{
 		titleText.text = SIGN_IN_TITLE;
-		emailInput.gameObject.SetActive(false);
-		showSignUpButton.gameObject.SetActive(true);
-		forgotPasswordButton.gameObject.SetActive(true);
 		submitButtonText.text = SIGN_IN_BUTTON_LABEL;
 
+		usernameInput.gameObject.SetActive(true);
+		passwordInput.gameObject.SetActive(true);
+		emailInput.gameObject.SetActive(false);
+
+		showSignInButton.gameObject.SetActive(false);
+		showSignUpButton.gameObject.SetActive(true);
+		forgotPasswordButton.gameObject.SetActive(true);
+
+
+		submitButton.onClick.RemoveAllListeners();
 		submitButton.onClick.AddListener(() => { SignIn(); });
 	}
 
@@ -147,9 +171,9 @@ public class Auth : MonoBehaviour
 			if (loginTask.IsCompleted && ParseUser.CurrentUser != null){
 				Debug.Log("success");
 				ShowFeedbackMessage("Welcome " + ParseUser.CurrentUser.Username);
+				transform.SendMessageUpwards( "OnLoginSuccess" , SendMessageOptions.RequireReceiver);
 				loginTask = null;
-			}
-			if (loginTask.IsFaulted){
+			}else if (loginTask.IsFaulted) {
 				Debug.Log("Fault");
 				ShowFeedbackMessage("Login Faild");
 				loginTask = null;
@@ -161,14 +185,17 @@ public class Auth : MonoBehaviour
 				ShowFeedbackMessage("Welcome " + ParseUser.CurrentUser.Username);
 				Debug.Log("success");
 				signUpTask = null;
-			}
-			if (signUpTask.IsFaulted){
+			}else if (signUpTask.IsFaulted){
 				ShowFeedbackMessage("Something went wrong during the registration, try again later");
 				Debug.Log("Fault");
 				signUpTask = null;
 			}
 
 		}
+	}
+
+	public void LogOut(){
+		ParseUser.LogOut();
 	}
 
 	public IEnumerator FeedbackMessageTimer(){
@@ -178,6 +205,6 @@ public class Auth : MonoBehaviour
 
 	public IEnumerator AuthPanelTimer(){
 		yield return new WaitForSeconds(2);
-		HideFeedbackMessage();
+		HideAuthWindow();
 	}
 }

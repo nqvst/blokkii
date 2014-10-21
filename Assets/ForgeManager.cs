@@ -8,6 +8,7 @@ public class ForgeManager : MonoBehaviour
 {
 	
 	GameManager gameManager;
+
 	[SerializeField] Transform lazerPrefab;
 	[SerializeField] Transform solidBoxPrefab;
 	[SerializeField] Transform boxPrefab;
@@ -15,26 +16,26 @@ public class ForgeManager : MonoBehaviour
 	[SerializeField] Transform finishPrefab;
 
 	[SerializeField] InputField levelNameInput;
+	[SerializeField] LayerMask whatToHit;
+	[SerializeField] GameObject authPanel;
+
 	Transform nextPrefab;
 	Transform currentPrefab;
 	Transform selectedPrefab;
 
 	Transform cam;
 	Transform player;
+
 	[SerializeField] Transform playerPrefab;
 	[SerializeField] Transform startPoint;
 
 	GameObject parentLevelObject;
-	[SerializeField] LayerMask whatToHit;
 
-	ParseObject level = new ParseObject("Level");
 	IList<object> levelObjects = new List<object>();
 
+	bool showLogin = false;
 	bool levelIsLoaded = false;
 	bool levelIsBuilt = false;
-
-	bool showLogin = false;
-
 	bool overMenu = false;
 
 	public virtual Vector3 mousePosition 
@@ -49,41 +50,134 @@ public class ForgeManager : MonoBehaviour
 	void Start ()
 	{
 		gameManager = GameManager.instance;
+	}
 
+	void Init() 
+	{
+		gameManager = GameManager.instance;
+		Debug.Log("Forge init");
+		CreateParentLevelObject();
 		nextPrefab = solidBoxPrefab;
 		SpawnPrefab();
-		
-		level["name"] = "Untitled";
-		levelNameInput.value = (string)level["name"];
-
 		cam = Camera.main.transform;
 		gameManager.playMode = false;
-	
-		CreateParentLevelObject();
 		LoadLevel();
-		
+	}
+
+	public void OnLoginSuccess()
+	{
+		if(ParseUser.CurrentUser != null){
+			showLogin = false;
+			Init();
+		} else {
+			ShowLogin();
+		}
+	}
+	
+	void ShowLogin ()
+	{
+		showLogin = true;
+		authPanel.gameObject.SetActive(true);
 	}
 
 	void LoadLevel ()
 	{
+		if(gameManager.currentForgeLevel != null){
+			RestoreLevelStateFromLevel();
+		}else if (gameManager.LEVEL_ID.Equals("")){
+			LoadLevelFromParse();
+		}
+	}
+
+	void LoadLevelFromParse ()
+	{
 		string levelId = gameManager.LEVEL_ID;
-		if( levelId == ""){
-			levelIsBuilt = true;
-		}else{
-			ParseQuery<ParseObject> query = ParseObject.GetQuery("Level");
-			Debug.Log("before GetAsync");
-			query.GetAsync(levelId).ContinueWith(t => {
-				Debug.Log("inside GetAsync");
-				level = t.Result;
-				levelIsLoaded = true;
-			});
-			Debug.Log("after GetAsync");
+
+		ParseQuery<ParseObject> query = ParseObject.GetQuery("Level");
+		Debug.Log("before GetAsync");
+		query.GetAsync(levelId).ContinueWith(t => {
+			Debug.Log("inside GetAsync");
+			gameManager.currentForgeLevel = t.Result;
+			levelIsLoaded = true;
+		});
+		Debug.Log("after GetAsync");
+	}
+
+	void RestoreLevelStateFromLevel ()
+	{ 
+		IList<object> tempLevelObjects = new List<object>();
+		bool result = gameManager.currentForgeLevel.TryGetValue("objects", out tempLevelObjects);
+		if(result){
+			Debug.Log ("game manager had a level to load");
+			levelObjects = tempLevelObjects;
+			RestoreLevelState();
+		} 
+		else{
+			Debug.Log("Gamemanager had no level for us ");
+		}
+	}
+	
+	void SaveLevelState(){
+		Debug.Log ("SaveLevel");
+		Debug.Log(levelObjects.Count);
+		if( levelObjects.Count > 0 ){
+			Debug.Log(ParseUser.CurrentUser.Username.ToString());
+			gameManager.currentForgeLevel["creatorName"] = ParseUser.CurrentUser.Username;
+			gameManager.currentForgeLevel["creator"] = ParseUser.CurrentUser;
+			gameManager.currentForgeLevel["name"] = levelNameInput.value;
+			gameManager.currentForgeLevel["objects"] = levelObjects;
+		}
+	}
+
+	void RestoreLevelState ()
+	{
+		Debug.Log(levelObjects.Count.ToString() + " objects in the list" );
+		
+		for( int i = 0;  i < levelObjects.Count; i++){
+			IDictionary dict = (IDictionary) levelObjects[i];
+			
+			IDictionary pos = (IDictionary) dict["position"];
+			IDictionary rot = (IDictionary) dict["rotation"];
+			
+			Vector2 spawnPos = new Vector2(float.Parse(pos["x"].ToString()),
+			                               float.Parse(pos["y"].ToString()));
+			
+			Vector3 spawnRot = new Vector3(float.Parse(rot["x"].ToString()),
+			                               float.Parse(rot["y"].ToString()),
+			                               float.Parse(rot["z"].ToString()));
+			Quaternion q = Quaternion.Euler(spawnRot);
+			
+			string prefabName = dict["type"].ToString();
+			
+			if(prefabName == "BuildBox"){
+				nextPrefab = boxPrefab;
+			}
+			if(prefabName == "Lazer"){
+				nextPrefab = lazerPrefab;
+			}
+			if(prefabName == "SolidBox"){
+				nextPrefab = solidBoxPrefab;
+			}
+			if(prefabName == "Finish"){
+				nextPrefab = finishPrefab;
+			}
+			if(prefabName == "Spawnpoint"){
+				nextPrefab = startPointPrefab;
+			}
+			Transform newObj = Instantiate(nextPrefab, spawnPos, q) as Transform;
+			newObj.name = dict["name"].ToString();
+			if(newObj.CompareTag("Spawnpoint")){
+				startPoint = newObj;
+				Debug.Log("Spawnpoint found in restore");
+			}
+			newObj.parent = parentLevelObject.transform;
 		}
 	}
 
 	void CreateParentLevelObject(){
 		parentLevelObject = new GameObject();
 		parentLevelObject.transform.name = "ParentLevelObject";
+		Debug.Log("parentObject done");
 	}
 
 	void SpawnPrefab ()
@@ -121,7 +215,7 @@ public class ForgeManager : MonoBehaviour
 	
 	void Update () 
 	{
-		Debug.Log(gameManager.playMode);
+		if(showLogin) return;
 
 		if(levelIsLoaded && !levelIsBuilt){
 			levelIsBuilt = true;
@@ -195,29 +289,15 @@ public class ForgeManager : MonoBehaviour
 		}
 	}
 
-	void OnLogin(){
-
-	}
-
-	void ShowLogin ()
+	public void SaveLevelToParse()
 	{
-		throw new System.NotImplementedException ();
-	}
-	
-	public void SaveLevel()
-	{
-		Debug.Log ("SaveLevel");
-		Debug.Log(levelObjects.Count);
+		SaveLevelState();
 		if( ParseUser.CurrentUser == null) {
 			ShowLogin();
-		} else if( levelObjects.Count > 0 ){
-			Debug.Log(ParseUser.CurrentUser.Username.ToString());
-			level["creatorName"] = ParseUser.CurrentUser.Username;
-			level["creator"] = ParseUser.CurrentUser;
-			level["name"] = levelNameInput.value;
-			level["objects"] = levelObjects;
-			level.SaveAsync();
+		} else {
+			gameManager.currentForgeLevel.SaveAsync();
 		}
+
 	}
 
 	public void OnMouseEnterMenu()
@@ -257,60 +337,7 @@ public class ForgeManager : MonoBehaviour
 	}
 
 	
-	void RestoreLevelStateFromLevel ()
-	{
-		levelObjects = level.Get<List<object>>("objects");
-		RestoreLevelState();
-	}
-
-
-	void RestoreLevelState ()
-	{
-		Debug.Log(levelObjects.Count.ToString() + " objects in the list" );
-
-		for( int i = 0;  i < levelObjects.Count; i++){
-			IDictionary dict = (IDictionary) levelObjects[i];
-			
-			IDictionary pos = (IDictionary) dict["position"];
-			IDictionary rot = (IDictionary) dict["rotation"];
-			
-			Vector2 spawnPos = new Vector2(float.Parse(pos["x"].ToString()),
-			                               float.Parse(pos["y"].ToString()));
-			
-			Vector3 spawnRot = new Vector3(float.Parse(rot["x"].ToString()),
-			                               float.Parse(rot["y"].ToString()),
-			                               float.Parse(rot["z"].ToString()));
-			Quaternion q = Quaternion.Euler(spawnRot);
-
-			string prefabName = dict["type"].ToString();
-
-			if(prefabName == "BuildBox"){
-				nextPrefab = boxPrefab;
-			}
-			if(prefabName == "Lazer"){
-				nextPrefab = lazerPrefab;
-			}
-			if(prefabName == "SolidBox"){
-				nextPrefab = solidBoxPrefab;
-			}
-			if(prefabName == "Finish"){
-				nextPrefab = finishPrefab;
-			}
-			if(prefabName == "Spawnpoint"){
-				nextPrefab = startPointPrefab;
-			}
-			Transform newObj = Instantiate(nextPrefab, spawnPos, q) as Transform;
-			newObj.name = dict["name"].ToString();
-			if(newObj.CompareTag("Spawnpoint")){
-				startPoint = newObj;
-				Debug.Log("Spawnpoint found in restore");
-			}
-			newObj.parent = parentLevelObject.transform;
-
-		}
-	}
-
-	void TogglePlayMode()
+		void TogglePlayMode()
 	{
 		cam.GetComponent<Camera2DFollow>().enabled = gameManager.playMode;
 		cam.GetComponent<MoveCamera>().enabled = !gameManager.playMode;
@@ -342,6 +369,7 @@ public class ForgeManager : MonoBehaviour
 	public void StartPlay()
 	{
 		if(gameManager.playMode) return;
+		SaveLevelState();
 		gameManager.playMode = true;
 		TogglePlayMode();
 	}

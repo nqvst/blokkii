@@ -71,6 +71,6 @@ public class Lazer : MonoBehaviour {
 	}
 
 	void Restart() {
-		Application.LoadLevel(Application.loadedLevel);
+		GameManager.instance.ReloadLevel();
 	}
 }
