@@ -76,4 +76,7 @@ public class GameManager : MonoBehaviour {
 		LEVEL_ID = levelID;
 		Application.LoadLevel(FORGE_LEVEL);
 	}
+	public void LogOut(){
+		ParseUser.LogOut();
+	}
 }
