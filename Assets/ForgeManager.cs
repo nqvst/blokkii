@@ -7,6 +7,7 @@ using Parse;
 public class ForgeManager : MonoBehaviour 
 {
 	
+	GameManager gameManager;
 	[SerializeField] Transform lazerPrefab;
 	[SerializeField] Transform solidBoxPrefab;
 	[SerializeField] Transform boxPrefab;
@@ -24,9 +25,7 @@ public class ForgeManager : MonoBehaviour
 	[SerializeField] Transform startPoint;
 
 	GameObject parentLevelObject;
-
 	[SerializeField] LayerMask whatToHit;
-	bool canBuild = true;
 
 	ParseObject level = new ParseObject("Level");
 	IList<object> levelObjects = new List<object>();
@@ -36,6 +35,8 @@ public class ForgeManager : MonoBehaviour
 	bool levelIsLoaded = false;
 	bool levelIsBuilt = false;
 
+	bool showLogin = false;
+
 	public virtual Vector3 mousePosition 
 	{
 		get
@@ -43,6 +44,22 @@ public class ForgeManager : MonoBehaviour
 			Vector3 mp = Camera.main.ScreenToWorldPoint( Input.mousePosition );
 			return new Vector3(mp.x, mp.y, 0);
 		}
+	}
+
+	void Start ()
+	{
+		gameManager = GameManager.instance;
+
+		nextPrefab = solidBoxPrefab;
+		SpawnPrefab();
+		
+		level["name"] = "Untitled";
+		levelNameInput.value = (string)level["name"];
+
+		cam = Camera.main.transform;
+		CreateParentLevelObject();
+		LoadLevel();
+		
 	}
 
 	void LoadLevel ()
@@ -58,17 +75,6 @@ public class ForgeManager : MonoBehaviour
 		Debug.Log("after GetAsync");
 	}
 
-	void Start ()
-	{
-		nextPrefab = solidBoxPrefab;
-		SpawnPrefab();
-		level["name"] = "Untitled";
-		levelNameInput.value = (string)level["name"];
-		cam = Camera.main.transform;
-		CreateParentLevelObject();
-		LoadLevel();
-
-	}
 	void CreateParentLevelObject(){
 		parentLevelObject = new GameObject();
 		parentLevelObject.transform.name = "ParentLevelObject";
@@ -95,12 +101,16 @@ public class ForgeManager : MonoBehaviour
 
 	void RotateLeft ()
 	{
-		currentPrefab.transform.Rotate(0, 0, 90);
+		if(currentPrefab){
+			currentPrefab.transform.Rotate(0, 0, 90);
+		}
 	}
 
 	void RotateRight ()
 	{
-		currentPrefab.transform.Rotate(0, 0, -90);
+		if(currentPrefab){
+			currentPrefab.transform.Rotate(0, 0, -90);
+		}
 	}
 	
 	void Update () 
@@ -109,8 +119,8 @@ public class ForgeManager : MonoBehaviour
 			levelIsBuilt = true;
 			RestoreLevelStateFromLevel();
 		}
-		if(playMode || !canBuild) return;
 
+		if(!gameManager.playMode) return;
 
 		if(Input.GetMouseButtonDown(0)) {
 
@@ -123,22 +133,22 @@ public class ForgeManager : MonoBehaviour
 				RemoveObjectFromLevel(hit.transform);
 			} 
 			
-			if ( currentPrefab && canBuild){
+			if ( currentPrefab && gameManager.playMode){
 				PlacePrefab();
 			}
 		}
 
-		if( currentPrefab && canBuild ) {
+		if( currentPrefab && gameManager.playMode ) {
 			Vector3 targetPosition = new Vector2 (Mathf.RoundToInt(mousePosition.x) , Mathf.RoundToInt(mousePosition.y) ); 
 			currentPrefab.position = Vector2.Lerp(currentPrefab.position, targetPosition, 0.3f);
 		}
 		if(Input.GetKeyDown(KeyCode.Escape)){
 			Cancel();
 		}
-		if (Input.GetKeyDown(KeyCode.Q) && canBuild) {
+		if (Input.GetKeyDown(KeyCode.Q) && gameManager.playMode) {
 			RotateLeft();	
 		}
-		if (Input.GetKeyDown(KeyCode.E) && canBuild) {
+		if (Input.GetKeyDown(KeyCode.E) && gameManager.playMode) {
 			RotateRight();	
 		}
 	}
@@ -179,7 +189,9 @@ public class ForgeManager : MonoBehaviour
 	{
 		Debug.Log ("SaveLevel");
 		Debug.Log(levelObjects.Count);
-		if( levelObjects.Count > 0 && ParseUser.CurrentUser != null){
+		if( ParseUser.CurrentUser != null) {
+			gameManager.playMode = false;
+		} else if( levelObjects.Count > 0 ){
 			Debug.Log(ParseUser.CurrentUser.Username.ToString());
 			level["creatorName"] = ParseUser.CurrentUser.Username;
 			level["creator"] = ParseUser.CurrentUser;
@@ -191,11 +203,11 @@ public class ForgeManager : MonoBehaviour
 
 	public void OnMouseEnterMenu()
 	{
-		canBuild = false;
+		gameManager.playMode = false;
 	}
 	public void OnMouseExitMenu()
 	{
-		canBuild = true;
+		gameManager.playMode = true;
 	}
 
 	IDictionary GetVector3(Vector3 vector)
@@ -286,10 +298,10 @@ public class ForgeManager : MonoBehaviour
 
 	public void TogglePlayMode()
 	{
-		playMode = !playMode;
-		cam.GetComponent<Camera2DFollow>().enabled = playMode;
-		cam.GetComponent<MoveCamera>().enabled = !playMode;
-		if( playMode ){
+		gameManager.playMode = !gameManager.playMode;
+		cam.GetComponent<Camera2DFollow>().enabled = gameManager.playMode;
+		cam.GetComponent<MoveCamera>().enabled = !gameManager.playMode;
+		if( gameManager.playMode ){
 			if(currentPrefab){
 				Destroy(currentPrefab.gameObject);
 			}

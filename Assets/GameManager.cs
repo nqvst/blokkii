@@ -5,7 +5,9 @@ using Parse;
 
 public class GameManager : MonoBehaviour {
 
-	public static bool forgeMode = false;
+	public bool playMode = false;
+	
+	public bool forgeMode = false;
 	public static string LEVEL_ID = "";
 
 	public const string PARSE_LOADED_LEVEL = "ComunityLevel";
