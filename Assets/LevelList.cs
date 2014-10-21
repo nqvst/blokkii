@@ -47,7 +47,7 @@ public class LevelList : MonoBehaviour
 	}
 
 	void FetchAllLevels(){
-		var query = ParseObject.GetQuery("Level").Limit(10); 
+		var query = ParseObject.GetQuery("Level").Limit(100); 
 		query.FindAsync().ContinueWith(t =>	{
 			IEnumerable<ParseObject> r = t.Result;
 			foreach (ParseObject obj in r){

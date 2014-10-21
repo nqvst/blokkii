@@ -194,13 +194,22 @@ public class ForgeManager : MonoBehaviour
 			Destroy(currentPrefab.gameObject);
 		}
 	}
+
+	void OnLogin(){
+
+	}
+
+	void ShowLogin ()
+	{
+		throw new System.NotImplementedException ();
+	}
 	
 	public void SaveLevel()
 	{
 		Debug.Log ("SaveLevel");
 		Debug.Log(levelObjects.Count);
-		if( ParseUser.CurrentUser != null) {
-			gameManager.playMode = false;
+		if( ParseUser.CurrentUser == null) {
+			ShowLogin();
 		} else if( levelObjects.Count > 0 ){
 			Debug.Log(ParseUser.CurrentUser.Username.ToString());
 			level["creatorName"] = ParseUser.CurrentUser.Username;
