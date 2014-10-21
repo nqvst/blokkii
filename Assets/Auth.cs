@@ -17,8 +17,9 @@ public class Auth : MonoBehaviour
 	[SerializeField] Button forgotPasswordButton;
 	[SerializeField] Button showSignUpButton;
 	[SerializeField] Text submitButtonText;
+	[SerializeField] Transform feedbackMessagePanel;
 
-	[SerializeField] Text feedbackMessage;
+	string feedbackMessage;
 
 	bool auth = false;
 
@@ -26,9 +27,12 @@ public class Auth : MonoBehaviour
 	public const string SIGN_IN_TITLE = "please Sign In";
 	public const string SIGN_UP_BUTTON_LABEL = "Sign Up!";
 	public const string SIGN_IN_BUTTON_LABEL = "Sign In!";
+	public const string RESET_TITLE = "please enter your E-mail";
+	public const string RESET_BUTTON_LABEL = "Reset";
 
 	Task loginTask;
 	Task signUpTask;
+
 	void Start () 
 	{
 		CheckAuth();
@@ -45,7 +49,34 @@ public class Auth : MonoBehaviour
 	}
 
 	public void HideAuthWindow() {
+		transform.parent.gameObject.SetActive(false);
+	}
 
+	void ShowFeedbackMessage(){
+
+	}
+
+	void HideFeedbackMessage ()
+	{
+
+	}
+
+	void ResetFeedbackMessage ()
+	{
+		HideFeedbackMessage();
+		feedbackMessage = "";
+	}
+
+	public void ShowPasswordReset(){
+		ResetFeedbackMessage();
+		titleText.text = RESET_TITLE;
+		submitButtonText.text = RESET_BUTTON_LABEL;
+		submitButton.onClick.AddListener(() => { ResetPassword(); });
+		emailInput.gameObject.SetActive(true);
+		showSignUpButton.gameObject.SetActive(true);
+		forgotPasswordButton.gameObject.SetActive(false);
+		passwordInput.gameObject.SetActive(false);
+		usernameInput.gameObject.SetActive(false);
 	}
 
 	public void ShowSignUp () 
@@ -53,6 +84,7 @@ public class Auth : MonoBehaviour
 		titleText.text = SIGN_UP_TITLE;
 		emailInput.gameObject.SetActive(true);
 		submitButtonText.text = SIGN_UP_BUTTON_LABEL;
+
 		showSignUpButton.gameObject.SetActive(false);
 		forgotPasswordButton.gameObject.SetActive(false);
 
@@ -68,6 +100,15 @@ public class Auth : MonoBehaviour
 		submitButtonText.text = SIGN_IN_BUTTON_LABEL;
 
 		submitButton.onClick.AddListener(() => { SignIn(); });
+	}
+
+	void ResetPassword ()
+	{
+		if(emailInput.value.Equals("")){
+			feedbackMessage = "E-mail can't be empty!";
+			return;
+		}
+		Task requestPasswordTask = ParseUser.RequestPasswordResetAsync(emailInput.value);
 	}
 
 	public void  SignUp(){
