@@ -51,8 +51,7 @@ public class Auth : MonoBehaviour
 			Debug.Log ("user is logged in as " + ParseUser.CurrentUser.Username);
 			auth = true;
 			ShowFeedbackMessage("Welcome " + ParseUser.CurrentUser.Username);
-			HideAuthWindow();
-			StopAllCoroutines();
+			StartCoroutine("AuthPanelTimer");
 		}
 	}
 
@@ -164,7 +163,7 @@ public class Auth : MonoBehaviour
 	void Update(){
 
 		if(ParseUser.CurrentUser != null){
-			HideAuthWindow();
+			StartCoroutine("AuthPanelTimer");
 		}
 
 		if(loginTask != null){

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using Parse;
+using System.Threading.Tasks;
 
 public class ForgeManager : MonoBehaviour 
 {
@@ -50,6 +51,9 @@ public class ForgeManager : MonoBehaviour
 	void Start ()
 	{
 		gameManager = GameManager.instance;
+		cam = Camera.main.transform;
+		cam.GetComponent<MoveCamera>().enabled = false;
+		showLogin = true;
 	}
 
 	void Init() 
@@ -68,10 +72,19 @@ public class ForgeManager : MonoBehaviour
 	{
 		if(ParseUser.CurrentUser != null){
 			showLogin = false;
+			cam.GetComponent<MoveCamera>().enabled = true;
 			Init();
 		} else {
 			ShowLogin();
 		}
+	}
+
+	public void CreateNewLevel(){
+		ClearLevel();
+		gameManager.currentForgeLevel = new ParseObject("Level");
+		levelObjects.Clear();
+		levelNameInput.value = "Untitled";
+
 	}
 	
 	void ShowLogin ()
@@ -84,9 +97,11 @@ public class ForgeManager : MonoBehaviour
 	{
 		if(gameManager.currentForgeLevel != null){
 			RestoreLevelStateFromLevel();
-		}else if (gameManager.LEVEL_ID.Equals("")){
+		}
+		if (!gameManager.LEVEL_ID.Equals("")){
 			LoadLevelFromParse();
 		}
+
 	}
 
 	void LoadLevelFromParse ()
@@ -132,7 +147,12 @@ public class ForgeManager : MonoBehaviour
 	void RestoreLevelState ()
 	{
 		Debug.Log(levelObjects.Count.ToString() + " objects in the list" );
-		
+
+		string tempName;
+		bool result = gameManager.currentForgeLevel.TryGetValue("name", out tempName);
+		if( result ) {
+			levelNameInput.value = tempName;
+		}
 		for( int i = 0;  i < levelObjects.Count; i++){
 			IDictionary dict = (IDictionary) levelObjects[i];
 			
@@ -296,6 +316,7 @@ public class ForgeManager : MonoBehaviour
 			ShowLogin();
 		} else {
 			gameManager.currentForgeLevel.SaveAsync();
+
 		}
 
 	}

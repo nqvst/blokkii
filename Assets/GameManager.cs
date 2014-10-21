@@ -81,7 +81,7 @@ public class GameManager : MonoBehaviour {
 	public void ForgeParseLevel(string levelID) 
 	{
 		LEVEL_ID = levelID;
-		currentForgeLevel = null;
+		currentForgeLevel = new ParseObject("Level");
 		Application.LoadLevel(FORGE_LEVEL);
 	}
 
