@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour {
 	public bool playMode = false;
 	
 	public bool forgeMode = false;
-	public static string LEVEL_ID = "";
+	public string LEVEL_ID = "";
 
 	public const string PARSE_LOADED_LEVEL = "ComunityLevel";
 	public const string COMUNITY_LEVEL_MENU = "CustomLevelMenu";
@@ -43,7 +43,7 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 
-	public static void setLevelId (string objectId) {
+	public void setLevelId (string objectId) {
 		LEVEL_ID = objectId;
 	}
 
@@ -71,7 +71,7 @@ public class GameManager : MonoBehaviour {
 		Application.LoadLevel(PARSE_LOADED_LEVEL);
 	}
 
-	public static void ForgeParseLevel(string levelID) 
+	public void ForgeParseLevel(string levelID) 
 	{
 		LEVEL_ID = levelID;
 		Application.LoadLevel(FORGE_LEVEL);

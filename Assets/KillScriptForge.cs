@@ -24,7 +24,7 @@ public class KillScriptForge : MonoBehaviour {
 	}
 
 	void Kill(){
-		fManager.TogglePlayMode();
+		fManager.StopPlay();
 	}
 
 	void SetForgeManager(){

@@ -156,12 +156,12 @@ public class LevelList : MonoBehaviour
 
 	public void ForgeParseLevel(string levelID) {
 		Debug.Log("clicked " + levelID);
-		GameManager.ForgeParseLevel(levelID);
+		GameManager.instance.ForgeParseLevel(levelID);
 	}
 
 	public void LoadForge()
 	{
-		GameManager.LEVEL_ID = "";
+		GameManager.instance.LEVEL_ID = "";
 		GameManager.instance.LoadLevel("Forge");
 	}
 

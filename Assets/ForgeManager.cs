@@ -30,12 +30,12 @@ public class ForgeManager : MonoBehaviour
 	ParseObject level = new ParseObject("Level");
 	IList<object> levelObjects = new List<object>();
 
-	public bool playMode = false;
-
 	bool levelIsLoaded = false;
 	bool levelIsBuilt = false;
 
 	bool showLogin = false;
+
+	bool overMenu = false;
 
 	public virtual Vector3 mousePosition 
 	{
@@ -57,6 +57,8 @@ public class ForgeManager : MonoBehaviour
 		levelNameInput.value = (string)level["name"];
 
 		cam = Camera.main.transform;
+		gameManager.playMode = false;
+	
 		CreateParentLevelObject();
 		LoadLevel();
 		
@@ -64,15 +66,19 @@ public class ForgeManager : MonoBehaviour
 
 	void LoadLevel ()
 	{
-		string levelId = GameManager.LEVEL_ID;
-		ParseQuery<ParseObject> query = ParseObject.GetQuery("Level");
-		Debug.Log("before GetAsync");
-		query.GetAsync(levelId).ContinueWith(t => {
-			Debug.Log("inside GetAsync");
-			level = t.Result;
-			levelIsLoaded = true;
-		});
-		Debug.Log("after GetAsync");
+		string levelId = gameManager.LEVEL_ID;
+		if( levelId == ""){
+			levelIsBuilt = true;
+		}else{
+			ParseQuery<ParseObject> query = ParseObject.GetQuery("Level");
+			Debug.Log("before GetAsync");
+			query.GetAsync(levelId).ContinueWith(t => {
+				Debug.Log("inside GetAsync");
+				level = t.Result;
+				levelIsLoaded = true;
+			});
+			Debug.Log("after GetAsync");
+		}
 	}
 
 	void CreateParentLevelObject(){
@@ -115,12 +121,20 @@ public class ForgeManager : MonoBehaviour
 	
 	void Update () 
 	{
+		Debug.Log(gameManager.playMode);
+
 		if(levelIsLoaded && !levelIsBuilt){
 			levelIsBuilt = true;
 			RestoreLevelStateFromLevel();
 		}
 
-		if(!gameManager.playMode) return;
+		if(gameManager.playMode || overMenu) return;
+
+		if( currentPrefab ) {
+			Vector3 targetPosition = new Vector2 (Mathf.RoundToInt(mousePosition.x) , Mathf.RoundToInt(mousePosition.y) ); 
+			currentPrefab.position = Vector2.Lerp(currentPrefab.position, targetPosition, 0.3f);
+		}
+
 
 		if(Input.GetMouseButtonDown(0)) {
 
@@ -133,22 +147,18 @@ public class ForgeManager : MonoBehaviour
 				RemoveObjectFromLevel(hit.transform);
 			} 
 			
-			if ( currentPrefab && gameManager.playMode){
+			if ( currentPrefab && !gameManager.playMode){
 				PlacePrefab();
 			}
 		}
 
-		if( currentPrefab && gameManager.playMode ) {
-			Vector3 targetPosition = new Vector2 (Mathf.RoundToInt(mousePosition.x) , Mathf.RoundToInt(mousePosition.y) ); 
-			currentPrefab.position = Vector2.Lerp(currentPrefab.position, targetPosition, 0.3f);
-		}
 		if(Input.GetKeyDown(KeyCode.Escape)){
 			Cancel();
 		}
-		if (Input.GetKeyDown(KeyCode.Q) && gameManager.playMode) {
+		if (Input.GetKeyDown(KeyCode.Q) && !gameManager.playMode) {
 			RotateLeft();	
 		}
-		if (Input.GetKeyDown(KeyCode.E) && gameManager.playMode) {
+		if (Input.GetKeyDown(KeyCode.E) && !gameManager.playMode) {
 			RotateRight();	
 		}
 	}
@@ -203,11 +213,11 @@ public class ForgeManager : MonoBehaviour
 
 	public void OnMouseEnterMenu()
 	{
-		gameManager.playMode = false;
+		overMenu = true;
 	}
 	public void OnMouseExitMenu()
 	{
-		gameManager.playMode = true;
+		overMenu = false;
 	}
 
 	IDictionary GetVector3(Vector3 vector)
@@ -226,12 +236,7 @@ public class ForgeManager : MonoBehaviour
 			{ "y", vector.y.ToString() }
 		};
 	}
-
-	void SaveLevelState ()
-	{
-		//level.SaveAsync();
-	}
-
+	
 	void ClearLevel ()
 	{
 		Destroy(parentLevelObject);
@@ -296,17 +301,16 @@ public class ForgeManager : MonoBehaviour
 		}
 	}
 
-	public void TogglePlayMode()
+	void TogglePlayMode()
 	{
-		gameManager.playMode = !gameManager.playMode;
 		cam.GetComponent<Camera2DFollow>().enabled = gameManager.playMode;
 		cam.GetComponent<MoveCamera>().enabled = !gameManager.playMode;
+
 		if( gameManager.playMode ){
 			if(currentPrefab){
 				Destroy(currentPrefab.gameObject);
 			}
 			SpawnPlayer();
-			SaveLevelState();
 		} else {
 			if( player ){
 				GameObject placeHolderGO = GameObject.FindGameObjectWithTag("Placeholder");
@@ -319,6 +323,20 @@ public class ForgeManager : MonoBehaviour
 		}
 	}
 
+	public void StopPlay()
+	{
+		if(!gameManager.playMode) return;
+		gameManager.playMode = false;
+		TogglePlayMode();
+	}
+
+	public void StartPlay()
+	{
+		if(gameManager.playMode) return;
+		gameManager.playMode = true;
+		TogglePlayMode();
+	}
+
 	void SpawnPlayer()
 	{
 		if(startPoint){
@@ -327,6 +345,7 @@ public class ForgeManager : MonoBehaviour
 		}
 		else{
 			Debug.Log("no spawn point");
+			StopPlay();
 		}
 	}
 

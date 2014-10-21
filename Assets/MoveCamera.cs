@@ -11,7 +11,7 @@ public class MoveCamera : MonoBehaviour {
 	[SerializeField] float speed = 0.2f;	
 
 	void FixedUpdate () {
-		if(gameManager.playMode){
+		if(!gameManager.playMode){
 			if( Input.GetAxis("Horizontal") != 0 ) {
 				transform.Translate(new Vector3(Input.GetAxis("Horizontal") * speed, 0, 0));
 			}
