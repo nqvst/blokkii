@@ -97,6 +97,10 @@ public class LevelSelect : MonoBehaviour
 		
 	}
 
+	public void GoToComunityLevels(){
+		GameManager.instance.LoadLevel(GameManager.COMUNITY_LEVEL_MENU);
+	}
+
 	public void RestartLevel()
 	{
 		SetLevel(Application.loadedLevelName);
