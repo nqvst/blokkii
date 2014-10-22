@@ -32,12 +32,29 @@ public class LevelList : MonoBehaviour
 
 	public void Reload()
 	{
-		FetchAllLevels();
+		ReloadMyLevels();
+		ReloadOtherLevels();
+	}
+	public void ReloadMyLevels()
+	{
+		ClearPanel(myLevelsListPanel);
 		FetchMyLevels();
 	}
+	public void ReloadOtherLevels()
+	{
+		ClearPanel(allLevelsListPanel);
+		FetchAllLevels();
+	}
 
+	void ClearPanel(Transform panel){
+		foreach(Transform child in myLevelsListPanel.transform){
+			Destroy(child.gameObject);
+		}
+	}
 	void FetchMyLevels()
 	{
+		myLevelsAreLoaded = false;
+		myLevelsAreRendered = false;
 		if(ParseUser.CurrentUser != null) {
 			Debug.Log("logged in as " + ParseUser.CurrentUser.Username);
 			var query = ParseObject.GetQuery("Level").WhereEqualTo("creator", ParseUser.CurrentUser);
@@ -53,6 +70,8 @@ public class LevelList : MonoBehaviour
 
 	void FetchAllLevels()
 	{
+		allLevelsAreRendered = false;
+		allLevelsAreLoaded = false;
 		var query = ParseObject.GetQuery("Level").Limit(100); 
 		query.FindAsync().ContinueWith(t =>	{
 			IEnumerable<ParseObject> r = t.Result;

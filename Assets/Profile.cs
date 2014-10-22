@@ -42,10 +42,6 @@ public class Profile : MonoBehaviour
 		notLoggedIn.blocksRaycasts = !auth;
 		notLoggedIn.interactable = !auth;
 
-
-
-
-
 	}
 
 	void PopulateProfile(){
@@ -56,10 +52,12 @@ public class Profile : MonoBehaviour
 	{
 		auth = true;
 		PopulateProfile();
+		levelList.ReloadMyLevels();
 	}
 
 	void OnLogOut() 
 	{
 		auth = false;
+		levelList.ReloadMyLevels();
 	}
 }

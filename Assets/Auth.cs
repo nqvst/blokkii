@@ -23,13 +23,14 @@ public class Auth : MonoBehaviour
 	[SerializeField] Transform target;
 
 	bool auth = false;
+	bool continueAsAnon = false;
 
-	public const string SIGN_UP_TITLE = "please Sign Up";
-	public const string SIGN_IN_TITLE = "please Sign In";
-	public const string SIGN_UP_BUTTON_LABEL = "Sign Up!";
-	public const string SIGN_IN_BUTTON_LABEL = "Sign In!";
-	public const string RESET_TITLE = "please enter your E-mail";
-	public const string RESET_BUTTON_LABEL = "Reset";
+	public const string SIGN_UP_TITLE 			= "please Sign Up";
+	public const string SIGN_IN_TITLE 			= "please Sign In";
+	public const string SIGN_UP_BUTTON_LABEL 	= "Sign Up!";
+	public const string SIGN_IN_BUTTON_LABEL 	= "Sign In!";
+	public const string RESET_TITLE 			= "please enter your E-mail";
+	public const string RESET_BUTTON_LABEL 		= "Reset";
 
 	Task loginTask;
 	Task signUpTask;
@@ -178,7 +179,7 @@ public class Auth : MonoBehaviour
 
 	void Update(){
 
-		auth = (ParseUser.CurrentUser != null );
+		auth = (ParseUser.CurrentUser != null ) || continueAsAnon;
 		targetAlpha = auth ? 0 : 1;
 		canvasGroup.alpha = Mathf.Lerp(canvasGroup.alpha, targetAlpha, Time.deltaTime * 4);
 		canvasGroup.blocksRaycasts = !auth;
@@ -229,6 +230,16 @@ public class Auth : MonoBehaviour
 		ShowSignIn();
 		target.SendMessage( "OnLogOut" , SendMessageOptions.RequireReceiver);
 
+	}
+
+	public void CancelLogin()
+	{
+		continueAsAnon = true;
+	}
+
+	public void ForceLogin()
+	{
+		continueAsAnon = false;
 	}
 
 	public IEnumerator FeedbackMessageTimer(){
