@@ -24,7 +24,14 @@ public class LevelList : MonoBehaviour
 	bool allLevelsAreLoaded = false;
 	bool myLevelsAreLoaded = false;
 
-	void Start () {
+	void Start () 
+	{
+		FetchAllLevels();
+		FetchMyLevels();
+	}
+
+	public void Reload()
+	{
 		FetchAllLevels();
 		FetchMyLevels();
 	}
@@ -44,7 +51,8 @@ public class LevelList : MonoBehaviour
 		}
 	}
 
-	void FetchAllLevels(){
+	void FetchAllLevels()
+	{
 		var query = ParseObject.GetQuery("Level").Limit(100); 
 		query.FindAsync().ContinueWith(t =>	{
 			IEnumerable<ParseObject> r = t.Result;

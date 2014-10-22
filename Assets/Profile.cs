@@ -21,6 +21,8 @@ public class Profile : MonoBehaviour
 
 	bool auth = false;
 
+	bool isProfilePopulated = false;
+
 	void Start () 
 	{
 		gameManager = GameManager.instance;
@@ -40,14 +42,23 @@ public class Profile : MonoBehaviour
 		notLoggedIn.blocksRaycasts = !auth;
 		notLoggedIn.interactable = !auth;
 
+
+
+
+
+	}
+
+	void PopulateProfile(){
+		usernameText.text = ParseUser.CurrentUser.Username;
 	}
 
 	void OnLoginSuccess() 
 	{
 		auth = true;
+		PopulateProfile();
 	}
 
-	void OnLogUut() 
+	void OnLogOut() 
 	{
 		auth = false;
 	}
