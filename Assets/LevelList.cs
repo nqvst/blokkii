@@ -170,8 +170,8 @@ public class LevelList : MonoBehaviour
 			float y = containerRectTransform.rect.height / 2 - height * j;
 			rectTransform.offsetMin = new Vector2(x, y);
 			
-			x = rectTransform.offsetMin.x + width - (offset / 2);
-			y = rectTransform.offsetMin.y + height - offset;
+			x = rectTransform.offsetMin.x + width;
+			y = rectTransform.offsetMin.y + height;
 			rectTransform.offsetMax = new Vector2(x, y);
 
 			i++;
