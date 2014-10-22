@@ -14,6 +14,8 @@ public class Profile : MonoBehaviour
 	[SerializeField] Text starsText;
 	[SerializeField] Text levelCount;
 
+	[SerializeField] LevelList levelList;
+
 	float targetAlpha = 0;
 	float targetAlphaLoggedOut = 0;
 

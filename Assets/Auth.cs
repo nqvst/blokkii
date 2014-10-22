@@ -44,7 +44,7 @@ public class Auth : MonoBehaviour
 		canvasGroup.alpha = 0f;
 		CheckAuth();
 		if( auth ) {
-			transform.SendMessageUpwards( "OnLoginSuccess" , SendMessageOptions.RequireReceiver);
+			target.SendMessage( "OnLoginSuccess" , SendMessageOptions.RequireReceiver);
 		}else {
 			HideFeedbackMessage();
 			ShowSignIn();
