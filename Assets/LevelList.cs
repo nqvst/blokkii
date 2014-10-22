@@ -27,7 +27,7 @@ public class LevelList : MonoBehaviour
 	void Start () 
 	{
 		FetchAllLevels();
-		FetchMyLevels();
+//		FetchMyLevels();
 	}
 
 	public void Reload()
@@ -55,6 +55,7 @@ public class LevelList : MonoBehaviour
 	{
 		myLevelsAreLoaded = false;
 		myLevelsAreRendered = false;
+		myLevels.Clear();
 		if(ParseUser.CurrentUser != null) {
 			Debug.Log("logged in as " + ParseUser.CurrentUser.Username);
 			var query = ParseObject.GetQuery("Level").WhereEqualTo("creator", ParseUser.CurrentUser);
@@ -72,6 +73,7 @@ public class LevelList : MonoBehaviour
 	{
 		allLevelsAreRendered = false;
 		allLevelsAreLoaded = false;
+		allLevels.Clear();
 		var query = ParseObject.GetQuery("Level").Limit(100); 
 		query.FindAsync().ContinueWith(t =>	{
 			IEnumerable<ParseObject> r = t.Result;
@@ -192,7 +194,9 @@ public class LevelList : MonoBehaviour
 		GameManager.instance.LoadLevel("Forge");
 	}
 
-
+	public void BackToMain(){
+		GameManager.instance.LoadLevel("main");
+	}
 
 
 }
