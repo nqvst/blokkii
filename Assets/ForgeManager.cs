@@ -90,7 +90,7 @@ public class ForgeManager : MonoBehaviour
 		}
 	}
 
-	public void OnLogUut()
+	public void OnLogOut()
 	{
 		if(ParseUser.CurrentUser == null){
 			showLogin = true;

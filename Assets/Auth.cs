@@ -20,6 +20,7 @@ public class Auth : MonoBehaviour
 	[SerializeField] Text submitButtonText;
 	[SerializeField] Transform feedbackMessagePanel;
 	[SerializeField] Text feedbackMessage;
+	[SerializeField] Transform target;
 
 	bool auth = false;
 
@@ -210,7 +211,7 @@ public class Auth : MonoBehaviour
 	{
 		ShowFeedbackMessage("Welcome " + ParseUser.CurrentUser.Username);
 		Debug.Log("success");
-		transform.SendMessageUpwards( "OnLoginSuccess" , SendMessageOptions.RequireReceiver);
+		target.SendMessage( "OnLoginSuccess" , SendMessageOptions.RequireReceiver);
 		ResetInputFields();
 	}
 	
@@ -226,7 +227,7 @@ public class Auth : MonoBehaviour
 		Debug.Log("Loging out...");
 		ParseUser.LogOut();
 		ShowSignIn();
-		transform.SendMessageUpwards( "OnLogUut" , SendMessageOptions.RequireReceiver);
+		target.SendMessage( "OnLogOut" , SendMessageOptions.RequireReceiver);
 
 	}
 
