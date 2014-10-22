@@ -53,6 +53,10 @@ public class Finish : MonoBehaviour {
 	}
 
 	void ChangeMap() {
-		levelSelect.SetLevel(Application.loadedLevel + 1);
+		if(Application.loadedLevelName.Equals("ComunityLevel")){
+			GameManager.instance.LoadLevel(GameManager.COMUNITY_LEVEL_MENU);
+		}else{
+			levelSelect.SetLevel(Application.loadedLevel + 1);
+		}
 	}
 }
