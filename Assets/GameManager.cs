@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour {
 
 	public ParseObject currentForgeLevel = new ParseObject("Level");
 
-	public const string PARSE_LOADED_LEVEL = "ComunityLevel";
+	public const string COMMUNITY_LEVEL = "ComunityLevel";
 	public const string COMUNITY_LEVEL_MENU = "CustomLevelMenu";
 	public const string FORGE_LEVEL = "Forge";
 
@@ -51,7 +51,7 @@ public class GameManager : MonoBehaviour {
 	}
 
 	void StartLevel() {
-		Application.LoadLevel(PARSE_LOADED_LEVEL);
+		Application.LoadLevel(COMMUNITY_LEVEL);
 	}
 
 	public void RestartLevel(){
@@ -75,7 +75,7 @@ public class GameManager : MonoBehaviour {
 	public void LoadParseLevel(string levelID) 
 	{
 		LEVEL_ID = levelID;
-		Application.LoadLevel(PARSE_LOADED_LEVEL);
+		Application.LoadLevel(COMMUNITY_LEVEL);
 	}
 
 	public void ForgeParseLevel(string levelID) 

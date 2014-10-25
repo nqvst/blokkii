@@ -191,6 +191,7 @@ public class LevelList : MonoBehaviour
 	public void LoadForge()
 	{
 		GameManager.instance.LEVEL_ID = "";
+		GameManager.instance.currentForgeLevel = new ParseObject("Level");
 		GameManager.instance.LoadLevel("Forge");
 	}
 

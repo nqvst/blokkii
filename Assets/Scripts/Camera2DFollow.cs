@@ -17,7 +17,6 @@ public class Camera2DFollow : MonoBehaviour {
 	void Start () {
 
 		setFinishAsTarget();
-		StartCoroutine(ShowFinishTimer(2.0F));
 
 		if(target) {
 			lastTargetPosition = target.position;
@@ -35,6 +34,13 @@ public class Camera2DFollow : MonoBehaviour {
 		}
 
 		if (Input.anyKeyDown){
+			SetPlayerAsTarget();
+		}
+
+		if(Input.GetKey(KeyCode.F)){
+			setFinishAsTarget();
+		}
+		else {
 			SetPlayerAsTarget();
 		}
 		// only update lookahead pos if accelerating or changed direction

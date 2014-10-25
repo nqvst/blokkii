@@ -28,7 +28,9 @@ public class ForgeManager : MonoBehaviour
 	Transform player;
 
 	[SerializeField] Transform playerPrefab;
-	[SerializeField] Transform startPoint;
+
+	Transform startPoint;
+	Transform finish;
 
 	GameObject parentLevelObject;
 
@@ -227,11 +229,24 @@ public class ForgeManager : MonoBehaviour
 
 	void PlacePrefab ()
 	{
+		if(currentPrefab.CompareTag("Spawnpoint") && startPoint != null){
+			RemoveObjectFromLevel(startPoint);
+		}
+		if(currentPrefab.CompareTag("Finish") && finish != null){
+			RemoveObjectFromLevel(finish);
+		}
+
 		currentPrefab.position = new Vector2 (Mathf.RoundToInt(currentPrefab.position.x) , Mathf.RoundToInt(currentPrefab.position.y) ); 
 		AddObjectToLevel(currentPrefab.name, currentPrefab.position, currentPrefab.rotation.eulerAngles);
-		if(currentPrefab.CompareTag("Spawnpoint")){
+
+		if(currentPrefab.CompareTag("Spawnpoint")) {
 			startPoint = currentPrefab;
 		}
+
+		if(currentPrefab.CompareTag("Finish")) {
+			finish = currentPrefab;
+		}
+
 		currentPrefab.parent = parentLevelObject.transform;
 		currentPrefab = null;
 
