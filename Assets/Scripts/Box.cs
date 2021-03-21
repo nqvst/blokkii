@@ -35,14 +35,14 @@ public class Box : MonoBehaviour {
 		{
 			foreach(Collider2D c in coll)
 			{
-				if(c && c != collider2D ) 
+				if(c && c != GetComponent<Collider2D>() ) 
 				{
 					overlaping = true;
 				}
 			}
 		}
 
-		if(!rigidbody2D.isKinematic && overlaping ){
+		if(!GetComponent<Rigidbody2D>().isKinematic && overlaping ){
 			SetKinematic();
 		}
 
@@ -59,8 +59,8 @@ public class Box : MonoBehaviour {
 
 	void SetKinematic()
 	{
-		rigidbody2D.isKinematic = true;
-		targetPos = new Vector2(Mathf.RoundToInt (transform.position.x + rigidbody2D.velocity.magnitude) , Mathf.RoundToInt( transform.position.y ));
+		GetComponent<Rigidbody2D>().isKinematic = true;
+		targetPos = new Vector2(Mathf.RoundToInt (transform.position.x + GetComponent<Rigidbody2D>().velocity.magnitude) , Mathf.RoundToInt( transform.position.y ));
 		set = true;
 	}
 

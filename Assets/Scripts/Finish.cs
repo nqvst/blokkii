@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using Parse;
 
 public class Finish : MonoBehaviour {
 
@@ -31,7 +30,7 @@ public class Finish : MonoBehaviour {
 		open = bus.active;
 
 		lockSprite.gameObject.SetActive(!open);
-		collider2D.enabled = open;
+		GetComponent<Collider2D>().enabled = open;
 	}
 
 	void OnTriggerEnter2D( Collider2D other ){
@@ -39,7 +38,7 @@ public class Finish : MonoBehaviour {
 
 			finished = true;
 			player = other.transform;
-			other.rigidbody2D.isKinematic = true;
+			other.GetComponent<Rigidbody2D>().isKinematic = true;
 			other.GetComponent<Platformer2DUserControl>().enabled = false;
 			other.GetComponent<Character2D>().enabled = false;
 

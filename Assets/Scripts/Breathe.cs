@@ -24,9 +24,9 @@ public class Breathe : MonoBehaviour
 			Flip();
 		}
 
-		particleSystem.startColor = Color.Lerp(particleSystem.startColor, targetColor, Time.deltaTime * pace * pace);
+		GetComponent<ParticleSystem>().startColor = Color.Lerp(GetComponent<ParticleSystem>().startColor, targetColor, Time.deltaTime * pace * pace);
 
-		Debug.Log(particleSystem.startColor.a);
+		Debug.Log(GetComponent<ParticleSystem>().startColor.a);
 
 	}
 

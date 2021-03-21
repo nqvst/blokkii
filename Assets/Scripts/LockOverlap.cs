@@ -36,6 +36,6 @@ public class LockOverlap : MonoBehaviour {
 			}
 		}
 
-		GetComponent<SpriteRenderer>().enabled = overlaping && transform.parent.rigidbody2D.isKinematic;
+		GetComponent<SpriteRenderer>().enabled = overlaping && transform.parent.GetComponent<Rigidbody2D>().isKinematic;
 	}
 }

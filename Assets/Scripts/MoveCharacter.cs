@@ -40,7 +40,7 @@ public class MoveCharacter : MonoBehaviour {
 		
 		if(Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.Space)){
 		
-			rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, jumpSpeed);
+			GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x, jumpSpeed);
 
 		}
 
@@ -54,7 +54,7 @@ public class MoveCharacter : MonoBehaviour {
 			dir = ((Vector3)targetPosition - (Vector3)transform.position ).normalized * speed;
 			Debug.DrawRay(transform.position, dir);
 		}
-		rigidbody2D.velocity = Vector2.Lerp( rigidbody2D.velocity, (Vector2)dir, Time.deltaTime * 10);
+		GetComponent<Rigidbody2D>().velocity = Vector2.Lerp( GetComponent<Rigidbody2D>().velocity, (Vector2)dir, Time.deltaTime * 10);
 //		rigidbody2D.velocity = dir;
 		
 	}

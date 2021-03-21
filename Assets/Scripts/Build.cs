@@ -78,7 +78,7 @@ public class Build : MonoBehaviour {
 			Transform box = Instantiate( boxPrefab, buildPosition, Quaternion.identity) as Transform;
 
 			if(willFall){
-				box.rigidbody2D.isKinematic = false;
+				box.GetComponent<Rigidbody2D>().isKinematic = false;
 			}
 
 			budget--;

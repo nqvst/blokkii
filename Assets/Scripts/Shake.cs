@@ -16,7 +16,7 @@ public class Shake : MonoBehaviour {
 	void Update () {
 		if (currentShakeIntensity > 0) {
 			transform.position = originalPosition + Random.insideUnitSphere * shakeIntensity;
-			if( !camera.isOrthoGraphic ) { // only modify the angle if the camera is in perspective mode.
+			if( !GetComponent<Camera>().orthographic ) { // only modify the angle if the camera is in perspective mode.
 				transform.rotation = new Quaternion(originalRotation.x * Random.Range(-currentShakeIntensity, currentShakeIntensity) * Time.deltaTime,
 				                                    originalRotation.y * Random.Range(-currentShakeIntensity, currentShakeIntensity) * Time.deltaTime,
 				                                    originalRotation.z * Random.Range(-currentShakeIntensity, currentShakeIntensity) * Time.deltaTime,

@@ -41,16 +41,16 @@ public class Character2D : MonoBehaviour
 		if(grounded || airControl)
 		{
 
-			if(rigidbody2D.velocity.x > 0 ) {
+			if(GetComponent<Rigidbody2D>().velocity.x > 0 ) {
 				// going left
-				if( rigidbody2D.velocity.x < maxSpeed ){
-					rigidbody2D.velocity = new Vector2 ( move * maxSpeed, rigidbody2D.velocity.y );
+				if( GetComponent<Rigidbody2D>().velocity.x < maxSpeed ){
+					GetComponent<Rigidbody2D>().velocity = new Vector2 ( move * maxSpeed, GetComponent<Rigidbody2D>().velocity.y );
 				}
 
 			} else {
 				//going right
-				if( rigidbody2D.velocity.x > maxSpeed * -1 ){
-					rigidbody2D.velocity = new Vector2 ( move * maxSpeed, rigidbody2D.velocity.y );
+				if( GetComponent<Rigidbody2D>().velocity.x > maxSpeed * -1 ){
+					GetComponent<Rigidbody2D>().velocity = new Vector2 ( move * maxSpeed, GetComponent<Rigidbody2D>().velocity.y );
 				}
 			}
 
@@ -61,7 +61,7 @@ public class Character2D : MonoBehaviour
 		}
 
         if (grounded && jump) {
-            rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, jumpForce);
+            GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x, jumpForce);
         }
 	}
 

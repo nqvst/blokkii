@@ -16,7 +16,7 @@ public class SoundControl : MonoBehaviour
 
 		musicManager = GameObject.Find ("Music").GetComponent<AudioSource> ();	
 
-		musicToggle = transform.FindChild("Mute").GetComponent<Toggle>();
+		musicToggle = transform.Find("Mute").GetComponent<Toggle>();
 		musicToggle.isOn = mute;
 		
 		if ( !mute ){

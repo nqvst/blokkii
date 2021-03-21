@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
-using Parse;
 
 public class LoginScript : MonoBehaviour {
 
@@ -9,8 +8,6 @@ public class LoginScript : MonoBehaviour {
 	[SerializeField] InputField password;
 
 	public bool logIn = false;
-
-	public ParseUser user = null;
 
 	bool showSpinner = false;
 	string message;

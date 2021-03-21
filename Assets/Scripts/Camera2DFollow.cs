@@ -16,7 +16,7 @@ public class Camera2DFollow : MonoBehaviour {
 
 	void Start () {
 
-		Screen.showCursor = false;
+		Cursor.visible = false;
 
 		setFinishAsTarget();
 		StartCoroutine(ShowFinishTimer(2.0F));

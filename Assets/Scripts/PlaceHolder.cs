@@ -22,7 +22,7 @@ public class PlaceHolder : MonoBehaviour {
 		buildScript = player.GetComponent<Build>();
 
 		spriteRenderer = GetComponent<SpriteRenderer>();
-		innerCheck = transform.FindChild("InnerOverlapCheck").GetComponent<OverlapCheck>();
+		innerCheck = transform.Find("InnerOverlapCheck").GetComponent<OverlapCheck>();
 	}
 
 	void FixedUpdate() 
